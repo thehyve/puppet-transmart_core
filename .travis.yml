@@ -1,0 +1,13 @@
+language: ruby
+sudo: required
+dist: trusty
+addons:
+    apt:
+        packages:
+            - puppet
+
+before_script:
+    - puppet --version
+    - ruby --version
+    - rake --version
+

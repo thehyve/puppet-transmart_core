@@ -1,0 +1,15 @@
+{
+  "name": "thehyve-transmart_core",
+  "version": "0.0.1",
+  "author": "thehyve",
+  "summary": "Puppet module for TranSMART",
+  "license": "GPL-3.0",
+  "source": "https://github.com/thehyve/puppet-transmart_core",
+  "project_page": "https://github.com/thehyve/puppet-transmart_core",
+  "issues_url": "https://github.com/thehyve/puppet-transmart_core/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
