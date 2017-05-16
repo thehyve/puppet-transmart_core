@@ -28,6 +28,11 @@ If you are using `hiera` for configuration, you can configure the repository wit
 transmart_core::nexus_repository: https://repo.thehyve.nl
 ```
 
+## Test
+Run the test suite:
+```bash
+rake test
+```
 
 ## License
 
