@@ -33,6 +33,12 @@
 #
 class transmart_core {
 
+    class { 'java':
+    }
+
+    class { 'maven::maven':
+        version => '3.0.5',
+    }
 
 }
 
