@@ -29,6 +29,12 @@ transmart_core::nexus_repository: https://repo.thehyve.nl
 ```
 
 ## Test
+Install rake:
+```bash
+yum install ruby-devel
+gem install bundler
+bundle
+```
 Run the test suite:
 ```bash
 rake test
