@@ -1,0 +1,34 @@
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+<% case scope.lookupvar('::transmart_core::params::db_type') -%>
+<% when 'postgresql' -%>
+PGHOST=<%= scope.lookupvar('::transmart_core::params::dbhost') %>
+PGPORT=<%= p = scope.lookupvar('::transmart_core::params::dbport') %>
+PGDATABASE=<%= scope.lookupvar('::transmart_core::params::databasename') %>
+PGUSER=<%= scope.lookupvar('::transmart_core::params::db_user') %>
+PGPASSWORD='<%= scope.lookupvar('::transmart::params::db_password') -%>'
+
+TABLESPACES=<%= scope.lookupvar('::transmart_core::params::tablespaces_dir') %>/
+PGSQL_BIN="sudo -E -u <%= scope.lookupvar('::transmart_core::params::db_user') %> /usr/bin/"
+
+export PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD TABLESPACES PGSQL_BIN
+<% when 'oracle' -%>
+ORAHOST=<%= scope.lookupvar('::transmart_core::params::dbhost') %>
+ORAPORT=<%= p = scope.lookupvar('::transmart_core::params::dbport') %>
+ORASID=<%= scope.lookupvar('::transmart_core::params::databasename') %>
+ORAUSER='<%= scope.lookupvar('::transmart_core::params::db_user') %>'
+ORAPASSWORD='<%= scope.lookupvar('::transmart_core::params::db_password') -%>'
+ORACLE_MANAGE_TABLESPACES=0
+ORACLE=1
+
+# some versions of transmart-data require this
+# export TABLESPACES=/bogus/
+
+export ORAHOST ORAPORT ORASID ORAUSER ORAPASSWORD ORACLE_MANAGE_TABLESPACES ORACLE
+<% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
+<% end -%>
+
+TSUSER_HOME=<%= scope.lookupvar('::transmart_core::params::tsuser_home') %>
+
+export PATH=$DIR/env:$PATH
+export TSUSER_HOME
