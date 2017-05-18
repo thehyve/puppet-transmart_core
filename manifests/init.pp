@@ -32,6 +32,14 @@
 # Copyright 2017 The Hyve.
 #
 class transmart_core {
+   include transmart_core::params
+
+   # Create transmart user.
+    user { $::transmart_core::params::user:
+        ensure => present,
+        home   => $::transmart_core::params::tsuser_home,
+        managehome => true,
+    }
 
     class { 'java':
     }

@@ -1,6 +1,7 @@
 class transmart_core::complete inherits transmart_core::params {
-
-    $home = "/home/${user}"
+ 
+    $home = $::transmart_core::params::tsuser_home
+    $application_war_file = "${home}/transmart-app.war"
 
     # Create transmart user.
     user { $user:
