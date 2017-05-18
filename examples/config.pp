@@ -10,4 +10,5 @@
 # https://docs.puppet.com/guides/tests_smoke.html
 #
 include ::transmart_core
+include ::transmart_core::data
 include ::transmart_core::config
