@@ -32,19 +32,30 @@
 # Copyright 2017 The Hyve.
 #
 class transmart_core {
-   include transmart_core::params
+    include ::transmart_core::params
 
-   # Create transmart user.
-    user { $::transmart_core::params::user:
-        ensure => present,
-        home   => $::transmart_core::params::tsuser_home,
+    $user = $::transmart_core::params::user
+    $home = $::transmart_core::params::tsuser_home
+
+    # Create transmart user.
+    user { $user:
+        ensure     => present,
+        home       => $home,
         managehome => true,
     }
 
-    class { 'java':
+    # Make home only accessible for the user
+    file { $home:
+        ensure  => directory,
+        mode    => '0700',
+        owner   => $user,
+        require => User[$user],
     }
 
-    class { 'maven::maven':
+    class { '::java':
+    }
+
+    class { '::maven::maven':
         version => '3.0.5',
     }
 
