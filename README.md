@@ -33,6 +33,7 @@ Install rake:
 ```bash
 yum install ruby-devel
 gem install bundler
+export PUPPET_VERSION=$(puppet --version)
 bundle
 ```
 Run the test suite:

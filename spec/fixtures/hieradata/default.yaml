@@ -1,2 +1,4 @@
 ---
+transmart_core::db_user: default_user
+transmart_core::db_password: Password1!
 

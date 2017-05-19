@@ -1,25 +1,25 @@
 class transmart_core::params(
-    $user               = hiera('::transmart_core::user', 'transmart'),
-    $user_home          = hiera('::transmart_core::user_home', undef),
-    $version            = hiera('::transmart_core::version', '17.1-SNAPSHOT'),
-    $nexus_url          = hiera('::transmart_core::nexus_url', 'https://repo.thehyve.nl'),
-    $repository         = hiera('::transmart_core::repository', 'snapshots'),
-    $db_user            = hiera('::transmart_core::db_user', ''),
-    $db_password        = hiera('::transmart_core::db_password', ''),
-    $db_type            = hiera('::transmart_core::db_type', 'postgresql'), # or 'oracle'
-    $db_host            = hiera('::transmart_core::db_host', 'localhost'),
-    $db_port_spec       = hiera('::transmart_core::db_port', ''),
-    $db_name_spec       = hiera('::transmart_core::db_name', undef),
+    $user               = hiera('transmart_core::user', 'transmart'),
+    $user_home          = hiera('transmart_core::user_home', undef),
+    $version            = hiera('transmart_core::version', '17.1-SNAPSHOT'),
+    $nexus_url          = hiera('transmart_core::nexus_url', 'https://repo.thehyve.nl'),
+    $repository         = hiera('transmart_core::repository', 'snapshots'),
+    $db_user            = hiera('transmart_core::db_user', ''),
+    $db_password        = hiera('transmart_core::db_password', ''),
+    $db_type            = hiera('transmart_core::db_type', 'postgresql'), # or 'oracle'
+    $db_host            = hiera('transmart_core::db_host', 'localhost'),
+    $db_port_spec       = hiera('transmart_core::db_port', ''),
+    $db_name_spec       = hiera('transmart_core::db_name', undef),
 ) {
     # Set Nexus location
     $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
 
     # Database settings
     if ($db_user == '') {
-        fail('No database user specified. Please configure ::transmart_core::db_user')
+        fail('No database user specified. Please configure transmart_core::db_user')
     }
     if ($db_password == '') {
-        fail('No database password specified. Please configure ::transmart_core::db_password')
+        fail('No database password specified. Please configure transmart_core::db_password')
     }
     case $db_type {
         'postgresql': {

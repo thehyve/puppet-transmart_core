@@ -1,0 +1,6 @@
+---
+transmart_core::db_user: test
+transmart_core::db_password: Password1!
+
+java::package: oracle-java8-jdk
+

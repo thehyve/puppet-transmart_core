@@ -1,9 +1,9 @@
 ---
 :backends:
-    - yaml
+  - yaml
 :yaml:
-    :datadir: './spec/fixtures/hieradata'
-    :hierarchy:
-        - '%{::clientcert}'
-        - 'default'
+  :datadir: './spec/fixtures/hieradata'
+  :hierarchy:
+    - '%{::clientcert}'
+    - 'default'
 
