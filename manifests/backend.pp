@@ -1,5 +1,8 @@
 class transmart_core::backend inherits transmart_core::params {
+    include ::transmart_core
+    include ::transmart_core::config
 
+    $user = $::transmart_core::params::user
     $home = $::transmart_core::params::tsuser_home
     $application_war_file = "${home}/transmart-app.war"
     $start_script = "${home}/start"
@@ -9,8 +12,8 @@ class transmart_core::backend inherits transmart_core::params {
     maven { $application_war_file:
         ensure  => latest,
         user    => $user,
-        id      => "org.transmartproject:transmartApp:${version}:war",
-        repos   => 'https://repo.thehyve.nl/content/repositories/snapshots/',
+        id      => "org.transmartproject:transmartApp:${::transmart_core::params::version}:war",
+        repos   => $::transmart_core::params::nexus_repository,
         require => [ File[$home], Class['maven::maven'] ],
     }
     file { $logs_dir:

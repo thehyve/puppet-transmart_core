@@ -1,34 +1,63 @@
 class transmart_core::params(
-    $user               = hiera('transmart_core::user', 'transmart'),
-    $version            = hiera('transmart_core::version', '17.1-SNAPSHOT'),
-    $nexus_repository   = hiera('transmart_core::nexus_repository', 'https://repo.thehyve.nl'),
-    $db_user            = hiera('transmart_core::db_user', ''),
-    $db_password        = hiera('transmart_core::db_password', ''),
-    $db_url             = hiera('transmart_core::db_url', ''),
-    $db_type            = hiera('transmart_core::db_type', 'postgresql'), # or 'oracle'
-    $dbport_spec        = hiera('transmart_core::db_url', ''),
-
-    $dbhost             = '', # vars, needs to change if db is in another machine
-    $databasename       = 'transmart', # vars
-
-    $user_home          = undef,
+    $user               = hiera('::transmart_core::user', 'transmart'),
+    $user_home          = hiera('::transmart_core::user_home', undef),
+    $version            = hiera('::transmart_core::version', '17.1-SNAPSHOT'),
+    $nexus_url          = hiera('::transmart_core::nexus_url', 'https://repo.thehyve.nl'),
+    $repository         = hiera('::transmart_core::repository', 'snapshots'),
+    $db_user            = hiera('::transmart_core::db_user', ''),
+    $db_password        = hiera('::transmart_core::db_password', ''),
+    $db_type            = hiera('::transmart_core::db_type', 'postgresql'), # or 'oracle'
+    $db_host            = hiera('::transmart_core::db_host', 'localhost'),
+    $db_port_spec       = hiera('::transmart_core::db_port', ''),
+    $db_port            = undef,
+    $db_name_spec       = hiera('::transmart_core::db_name', undef),
+    $db_name            = undef,
+    $db_url             = undef,
 ) {
-    if $db_type == 'postgresql' {
-        $postgresql_params  = {
-            version             => '9.4',
-            manage_package_repo => true,
+    # Set Nexus location
+    $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
+
+    # Database settings
+    if ($db_user == '') {
+        fail('No database user specified. Please configure ::transmart_core::db_user')
+    }
+    if ($db_password == '') {
+        fail('No database password specified. Please configure ::transmart_core::db_password')
+    }
+    case $db_type == 'postgresql' {
+        'postgresql': {
+            $postgresql_params  = {
+                version             => '9.4',
+                manage_package_repo => true,
+            }
+            $tablespaces_dir = "/var/lib/pgsql/${postgresql_params[version]}/data/tablespaces"
+            if $db_port_spec {
+              $db_port = $db_port_spec
+            } else {
+              $db_port = 5432
+            }
+            if $db_name_spec {
+                $db_name = $db_name_spec
+            } else {
+                $db_name = 'transmart'
+            }
+            $db_url = "jdbc:postgresql://${db_host}:${db_port}/${db_name}"
         }
-        $tablespaces_dir = "/var/lib/pgsql/${postgresql_params[$version]}/data/tablespaces"
-        if $dbport_spec {
-          $dbport = $dbport_spec
-        } else {
-          $dbport = 5432
+        'oracle': {
+            if $db_port_spec {
+              $db_port = $db_port_spec
+            } else {
+              $db_port = 1521
+            }
+            if $db_name_spec {
+                $db_name = $db_name_spec
+            } else {
+                $db_name = 'orcl'
+            }
+            $db_url = "jdbc:oracle:thin:@${db_host}:${db_port}/${db_name}"
         }
-    } else {
-        if $dbport_spec {
-          $dbport = $dbport_spec
-        } else {
-          $dbport = 1521
+        default: {
+            fail("Unsupported database type: '${db_type}'. Options: postgres, oracle.")
         }
     }
 

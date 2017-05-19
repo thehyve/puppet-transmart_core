@@ -6,24 +6,49 @@
 # Parameters
 # ----------
 #
-# * `nexus_repository`
+# * `user`
+# The system user to be created that runs the application (default: transmart).
+#
+# * `user_home`
+# The home directory where the application files are stored (default: /home/${user}).
+#
+# * `version`
+# Version of the TranSMART artefacts in Nexus (default: 17.1-SNAPSHOT).
+#
+# * `nexus_url`
 # The url of the repository to fetch the TranSMART artefacts from
 # (default: https://repo.thehyve.nl).
 #
-# * `version`
-# Version of the TranSMART artefacts in Nexus (default: latest).
+# * `db_user`
+# The database user. Required.
+#
+# * `db_password`
+# The database user's password. Required.
+#
+# * `db_type`
+# 'postgresql' or 'oracle' (default: postgresql).
+#
+# * `db_host`
+# The hostname of the database server (default: localhost).
+#
+# * `db_port`
+# The port of the database server (default: 5322 if postgres, 1521 if oracle).
+#
+# * `db_name`
+# The name of the application database (default: transmart).
 #
 # Examples
 # --------
 #
 # @example
 #    class { 'transmart_core':
-#      nexus_repository => 'https://repo.thehyve.nl',
+#      version => '17.1-PRERELEASE',
 #    }
 #
 # Authors
 # -------
 #
+# Ewelina Grudzień <ewelina@thehyve.nl>
 # Gijs Kant <gijs@thehyve.nl>
 #
 # Copyright
@@ -31,8 +56,7 @@
 #
 # Copyright 2017 The Hyve.
 #
-class transmart_core {
-    include ::transmart_core::params
+class transmart_core inherits transmart_core::params {
 
     $user = $::transmart_core::params::user
     $home = $::transmart_core::params::tsuser_home
