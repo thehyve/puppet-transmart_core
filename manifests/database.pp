@@ -7,8 +7,8 @@ class transmart_core::database inherits transmart_core::params {
     }
 
     class { '::postgresql::globals':
-        manage_package_repo => $::transmart_core::params::postgresql_params::manage_package_repo,
-        version             => $::transmart_core::params::postgresql_params::version,
+        manage_package_repo => $::transmart_core::params::postgresql_params[manage_package_repo],
+        version             => $::transmart_core::params::postgresql_params[version],
     }
     -> class { '::postgresql::server':
     }

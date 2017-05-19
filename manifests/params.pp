@@ -9,10 +9,7 @@ class transmart_core::params(
     $db_type            = hiera('::transmart_core::db_type', 'postgresql'), # or 'oracle'
     $db_host            = hiera('::transmart_core::db_host', 'localhost'),
     $db_port_spec       = hiera('::transmart_core::db_port', ''),
-    $db_port            = undef,
     $db_name_spec       = hiera('::transmart_core::db_name', undef),
-    $db_name            = undef,
-    $db_url             = undef,
 ) {
     # Set Nexus location
     $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
@@ -24,9 +21,9 @@ class transmart_core::params(
     if ($db_password == '') {
         fail('No database password specified. Please configure ::transmart_core::db_password')
     }
-    case $db_type == 'postgresql' {
+    case $db_type {
         'postgresql': {
-            $postgresql_params  = {
+            $postgresql_params = {
                 version             => '9.4',
                 manage_package_repo => true,
             }
@@ -57,7 +54,7 @@ class transmart_core::params(
             $db_url = "jdbc:oracle:thin:@${db_host}:${db_port}/${db_name}"
         }
         default: {
-            fail("Unsupported database type: '${db_type}'. Options: postgres, oracle.")
+            fail("Unsupported database type: '${db_type}'. Options: postgresql, oracle.")
         }
     }
 

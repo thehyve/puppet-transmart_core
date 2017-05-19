@@ -12,6 +12,8 @@
 
 class {'::transmart_core::params':
     version     => '17.1-SNAPSHOT',
+    db_user     => 'admin',
+    db_password => 'Password1!',
 }
 class {'::transmart_core::complete':
 }
