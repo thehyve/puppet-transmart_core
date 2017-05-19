@@ -1,12 +1,19 @@
 class transmart_core::config inherits transmart_core::params {
-    require ::transmart_core
+    require transmart_core
 
     $tsdata_dir = $::transmart_core::params::tsdata_dir
-
+    $config_prefix = "$::transmart_core::params::tsuser_home/.grails/transmartConfig"
+  
     File {
         owner   => $::transmart_core::params::user,
         group   => $::transmart_core::params::user,
         require => User[$::transmart_core::params::user],
+    }
+
+    file { "${config_prefix}/application.groovy":
+        ensure  => file,
+        content => template("transmart_core/ts-config.erb"),
+        mode    => '0700',
     }
 
     file { "${tsdata_dir}/vars":

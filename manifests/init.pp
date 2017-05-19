@@ -82,6 +82,5 @@ class transmart_core inherits transmart_core::params {
     class { '::maven::maven':
         version => '3.0.5',
     }
-
 }
 
