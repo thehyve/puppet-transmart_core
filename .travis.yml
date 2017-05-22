@@ -2,12 +2,23 @@ language: ruby
 sudo: required
 dist: trusty
 addons:
-    apt:
-        packages:
-            - puppet
+  apt:
+    packages:
+      - puppet
 
-before_script:
-    - puppet --version
-    - ruby --version
-    - rake --version
+env:
+  - PUPPET_VERSION=3.8.7
+
+install:
+  - sudo apt-get install -y ruby-dev
+  - gem install bundler
+  - bundle
+
+before_script: 
+  - puppet --version
+  - ruby --version
+  - rake --version
+
+script:
+  - rake test
 
