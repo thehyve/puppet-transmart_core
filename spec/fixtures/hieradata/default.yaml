@@ -1,4 +1,3 @@
 ---
-transmart_core::db_user: default_user
-transmart_core::db_password: Password1!
+java::package: java-1.8.0-openjdk
 

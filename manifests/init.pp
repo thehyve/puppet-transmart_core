@@ -71,7 +71,7 @@ class transmart_core inherits transmart_core::params {
     # Make home only accessible for the user
     file { $home:
         ensure  => directory,
-        mode    => '0700',
+        mode    => '0711',
         owner   => $user,
         require => User[$user],
     }

@@ -1,0 +1,18 @@
+# DATA SOURCE CONFIGURATION
+dataSources {
+  dataSource {
+<% case scope.lookupvar('::transmart_core::params::db_type') -%>
+<% when 'postgresql' -%>
+      driverClassName = 'org.postgresql.Driver'
+      dialect = 'org.hibernate.dialect.PostgreSQLDialect'
+<% when 'oracle' -%>
+      driverClassName = 'oracle.jdbc.driver.OracleDriver'
+      dialect = 'org.hibernate.dialect.Oracle10gDialect'
+<% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
+<% end -%>
+      url = '<%= scope.lookupvar('::transmart_core::params::db_url') %>'
+      username = '<%= scope.lookupvar('::transmart_core::params::db_user') %>'
+      password = '<%= scope.lookupvar('::transmart_core::params::db_password') %>'
+      dbCreate = 'none'
+  }
+}

@@ -10,10 +10,5 @@
 # https://docs.puppet.com/guides/tests_smoke.html
 #
 
-class {'::transmart_core::params':
-    version     => '17.1-SNAPSHOT',
-    db_user     => 'admin',
-    db_password => 'Password1!',
-}
-class {'::transmart_core::complete':
-}
+include ::transmart_core::complete
+

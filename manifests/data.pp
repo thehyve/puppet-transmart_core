@@ -1,7 +1,7 @@
 class transmart_core::data inherits transmart_core::params {
     include ::transmart_core
 
-    $home = $::transmart_core::params::tmuser_home
+    $home = $::transmart_core::params::tsuser_home
     $tsdata_tar_file = $::transmart_core::params::tsdata_tar_file
     $tsdata_dir = $::transmart_core::params::tsdata_dir
 
