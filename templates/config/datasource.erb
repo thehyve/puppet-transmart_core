@@ -1,18 +1,77 @@
-// Data source configuration
+/*
+ * DATA SOURCE CONFIGURATION
+ */
+
 dataSources {
-  dataSource {
+    dataSource {
 <% case scope.lookupvar('::transmart_core::params::db_type') -%>
 <% when 'postgresql' -%>
-      driverClassName = 'org.postgresql.Driver'
-      dialect = 'org.hibernate.dialect.PostgreSQLDialect'
+        driverClassName = 'org.postgresql.Driver'
+        dialect = 'org.hibernate.dialect.PostgreSQLDialect'
 <% when 'oracle' -%>
-      driverClassName = 'oracle.jdbc.driver.OracleDriver'
-      dialect = 'org.hibernate.dialect.Oracle10gDialect'
+        driverClassName = 'oracle.jdbc.driver.OracleDriver'
+        dialect = 'org.hibernate.dialect.Oracle10gDialect'
 <% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
 <% end -%>
-      url = '<%= scope.lookupvar('::transmart_core::params::db_url') %>'
-      username = '<%= scope.lookupvar('::transmart_core::params::db_user') %>'
-      password = '<%= scope.lookupvar('::transmart_core::params::db_password') %>'
-      dbCreate = 'none'
-  }
+        url = '<%= scope.lookupvar('::transmart_core::params::db_url') %>'
+        username = '<%= scope.lookupvar('::transmart_core::params::db_user') %>'
+        password = '<%= scope.lookupvar('::transmart_core::params::db_password') %>'
+        dbCreate = 'none'
+       
+        properties {
+            numTestsPerEvictionRun = 3
+            maxWait = 10000
+
+            testOnBorrow = true
+            testWhileIdle = true
+            testOnReturn = true
+
+            validationQuery = "select 1 from dual"
+
+            minEvictableIdleTimeMillis = 1000 * 60 * 5
+            timeBetweenEvictionRunsMillis = 1000 * 60 * 5
+        }
+    }
+    
+    oauth2 {
+        driverClassName = 'org.h2.Driver'
+        url = "jdbc:h2:~/.grails/oauth2db;MVCC=TRUE"
+        dialect = 'org.hibernate.dialect.H2Dialect'
+        username = 'sa'
+        password = ''
+        dbCreate = 'update'
+        logSql = true
+        formatSql = true
+    }
 }
+
+environments {
+    development {
+        dataSource {
+            logSql    = true
+            formatSql = true
+            properties {
+                maxActive   = 10
+                maxIdle     = 5
+                minIdle     = 2
+                initialSize = 2
+            }
+        }
+    }
+    production {
+        dataSource {
+            logSql    = false
+            formatSql = false
+            properties {
+                maxActive   = 50
+                maxIdle     = 25
+                minIdle     = 5
+                initialSize = 5
+            }
+        }
+    }
+}
+
+
+
+
