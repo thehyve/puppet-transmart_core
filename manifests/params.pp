@@ -10,6 +10,7 @@ class transmart_core::params(
     $db_host            = hiera('transmart_core::db_host', 'localhost'),
     $db_port_spec       = hiera('transmart_core::db_port', ''),
     $db_name_spec       = hiera('transmart_core::db_name', undef),
+    $memory             = hiera('transmart_core::memory', '1g'),
 ) {
     # Set Nexus location
     $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
