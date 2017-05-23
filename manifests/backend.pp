@@ -31,7 +31,7 @@ class transmart_core::backend inherits transmart_core::params {
     -> file { '/etc/systemd/system/transmart-app.service':
         ensure  => file,
         mode    => '0644',
-        content => template('transmart_core/transmart-app.service.erb'),
+        content => template('transmart_core/service/transmart-app.service.erb'),
         notify  => Service['transmart-app'],
     }
     # Start the application service

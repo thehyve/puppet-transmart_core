@@ -1,19 +1,22 @@
-#!/bin/sh -e
-# Starts, stops, and restarts solr
-SOLR_DIR="<%= scope.lookupvar('::transmart_core::params::tsdata_dir') %>/solr"
-JAVA_OPTIONS="-Xmx1024m -DSTOP.PORT=8079 -DSTOP.KEY=stopkey -jar start.jar"
-LOG_FILE="/var/log/solr.log"
-JAVA="/usr/bin/java"
+#!/usr/bin/env bash
+
+SOLR_DIR="<%= @tsdata_dir %>/solr"
+JAVA_OPTIONS="-Xmx1024m -DSTOP.PORT=8079 -DSTOP.KEY=stopkey"
+LOG_FILE="<%= @solr_log_file %>"
+
+echo "${0} ${1}"
+
 case $1 in
     start)
-        echo "Starting Solr"
+        echo "Starting Solr for TranSMART ..."
         cd $SOLR_DIR
-        $JAVA $JAVA_OPTIONS &> $LOG_FILE &
+        pwd
+        java ${JAVA_OPTIONS} -jar start.jar &> ${LOG_FILE} &
         ;;
     stop)
-        echo "Stopping Solr"
+        echo "Stopping Solr for TranSMART ..."
         cd $SOLR_DIR
-        $JAVA $JAVA_OPTIONS --stop
+        java ${JAVA_OPTIONS} -jar start.jar --stop
         ;;
     restart)
         $0 stop
@@ -25,3 +28,4 @@ case $1 in
         exit 1
         ;;
 esac
+

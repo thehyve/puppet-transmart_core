@@ -1,0 +1,15 @@
+[Unit]
+Description=TranSMART Solr service
+
+[Service]
+Type=forking
+ExecStart=<%= @solr_script %> start
+ExecReload=<%= @solr_script %> restart
+ExecStop=<%= @solr_script %> stop
+User=<%= @user %>
+Restart=always
+StandardOutput=journal+console
+
+[Install]
+WantedBy=multi-user.target
+
