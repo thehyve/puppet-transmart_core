@@ -11,7 +11,19 @@ class transmart_core::params(
     $db_port_spec       = hiera('transmart_core::db_port', ''),
     $db_name_spec       = hiera('transmart_core::db_name', undef),
     $memory             = hiera('transmart_core::memory', '1g'),
+
+    $vhost_servername   = $::trusted['certname'],
+    $protocol           = 'https',
+
+    $jobs_directory     = '/var/tmp/jobs',
+
+    $saml_enabled       = hiera('transmart_core::saml_enabled', false),
+    $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
+    $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
 ) {
+    # Set tranSMART url
+    $transmart_url = "${protocol}://${vhost_servername}"
+
     # Set Nexus location
     $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
 
@@ -70,6 +82,5 @@ class transmart_core::params(
 
     # Set transmart-data directory
     $tsdata_dir = "${tsuser_home}/transmart-data-${version}"
-
 }
 
