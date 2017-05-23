@@ -11,6 +11,7 @@ class transmart_core::backend inherits transmart_core::params {
     $app_opts = "-Dserver.port=${app_port} -Djava.security.egd=file:///dev/urandom "
     $start_script = "${home}/start"
     $logs_dir = "${home}/logs"
+    $jobs_dir = $::transmart_core::params::jobs_directory
 
     # Download the application war
     maven { $application_war_file:
@@ -21,6 +22,11 @@ class transmart_core::backend inherits transmart_core::params {
         require => [ File[$home], Class['maven::maven'] ],
     }
     file { $logs_dir:
+        ensure => directory,
+        owner  => $user,
+        mode   => '0700',
+    }
+    file { $jobs_dir:
         ensure => directory,
         owner  => $user,
         mode   => '0700',
@@ -42,7 +48,7 @@ class transmart_core::backend inherits transmart_core::params {
     -> service { 'transmart-app':
         ensure   => running,
         provider => 'systemd',
-        require  => [ File[$logs_dir], Maven[$application_war_file] ],
+        require  => [ File[$logs_dir], File[$jobs_dir], Maven[$application_war_file] ],
     }
 
 }
