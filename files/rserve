@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+/opt/R/bin/R CMD Rserve --quiet --vanilla --RS-conf '/etc/Rserve.conf'
+

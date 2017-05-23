@@ -1,0 +1,12 @@
+[Unit]
+Description=RServe
+
+[Service]
+ExecStart=<%= @rserve_script %>
+User=<%= @user %>
+Restart=always
+StandardOutput=journal+console
+
+[Install]
+WantedBy=multi-user.target
+

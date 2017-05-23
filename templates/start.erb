@@ -2,5 +2,5 @@
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 pwd
-java -jar <%= @application_war_file %>
+java -jar <%= @java_opts %> <%= @app_opts %> <%= @application_war_file %>
 
