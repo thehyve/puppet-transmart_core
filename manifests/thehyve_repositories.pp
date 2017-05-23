@@ -1,6 +1,6 @@
 class transmart_core::thehyve_repositories {
     if $::osfamily == 'Debian' {
-        require apt
+        require ::apt
 
         if $::lsbdistcodename == 'trusty' {
             $release = 'trusty'
