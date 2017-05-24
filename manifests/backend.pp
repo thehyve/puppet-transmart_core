@@ -20,6 +20,7 @@ class transmart_core::backend inherits transmart_core::params {
         id      => "org.transmartproject:transmartApp:${::transmart_core::params::version}:war",
         repos   => $::transmart_core::params::nexus_repository,
         require => [ File[$home], Class['maven::maven'] ],
+        notify  => Service['transmart-app'],
     }
     file { $logs_dir:
         ensure => directory,
