@@ -21,7 +21,7 @@ class transmart_core::database inherits transmart_core::params {
     }
 
     # Create TranSMART tablespace directories
-    file { ["$tablespace_prefix", "${tablespace_prefix}/transmart", "${tablespace_prefix}/indx"]:
+    file { [$tablespace_prefix, "${tablespace_prefix}/transmart", "${tablespace_prefix}/indx"]:
         ensure  => directory,
         owner   => 'postgres',
         mode    => '0755',
