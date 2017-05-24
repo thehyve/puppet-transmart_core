@@ -7,7 +7,7 @@ class transmart_core::backend inherits transmart_core::params {
     $application_war_file = "${home}/transmart-app.war"
     $memory = $::transmart_core::params::memory
     $java_opts = "-server -Xms${memory} -Xmx${memory} -Djava.awt.headless=true -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true "
-    $app_port = 8080
+    $app_port = $::transmart_core::params::app_port
     $app_opts = "-Dserver.port=${app_port} -Djava.security.egd=file:///dev/urandom "
     $start_script = "${home}/start"
     $logs_dir = "${home}/logs"

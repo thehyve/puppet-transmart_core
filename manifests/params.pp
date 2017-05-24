@@ -13,7 +13,8 @@ class transmart_core::params(
     $db_name_spec       = hiera('transmart_core::db_name', undef),
     $biomart_user_pasword = hiera('transmart_core::biomart_user_password', 'biomart'),
 
-    $memory             = hiera('transmart_core::memory', '1g'),
+    $memory             = hiera('transmart_core::memory', '2g'),
+    $app_port           = hiera('transmart_core::app_port', '8080'),
 
     $transmart_url      = hiera('transmart_core::transmart_url', undef),
     $jobs_directory     = '/var/tmp/jobs',
