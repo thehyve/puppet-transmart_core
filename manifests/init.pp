@@ -82,5 +82,9 @@ class transmart_core inherits transmart_core::params {
     class { '::maven::maven':
         version => '3.0.5',
     }
+
+    # Required for the R library Cairo
+    package { 'libpng12': }
+
 }
 
