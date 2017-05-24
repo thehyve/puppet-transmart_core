@@ -6,5 +6,6 @@ class transmart_core::complete inherits transmart_core::params {
     include ::transmart_core::solr
     include ::transmart_core::rserve
     include ::transmart_core::backend
+    include ::transmart_core::batch
 }
 
