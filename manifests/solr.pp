@@ -4,10 +4,23 @@ class transmart_core::solr inherits transmart_core::params {
 
     $user = $::transmart_core::params::user
     $home = $::transmart_core::params::tsuser_home
-    $tsdata_tar_file = $::transmart_core::params::tsdata_tar_file
-    $tsdata_dir = $::transmart_core::params::tsdata_dir
+    $solr_tar_file = "${home}/transmart-data-${::transmart_core::params::version}-solr.tar"
+    $solr_dir = "${home}/transmart-data-solr-${::transmart_core::params::version}"
     $solr_script = "${home}/solr"
     $solr_log_file = '/var/log/solr.log'
+
+    # Download and untar transmart-data-solr
+    archive::nexus { $solr_tar_file:
+        user         => $user,
+        url          => $::transmart_core::params::nexus_url,
+        gav          => "org.transmartproject:transmart-data-solr:${::transmart_core::params::version}",
+        repository   => $::transmart_core::params::repository,
+        packaging    => 'tar',
+        extract      => true,
+        extract_path => $home,
+        creates      => $solr_dir,
+        cleanup      => true,
+    }
 
     file { $solr_log_file:
         ensure => file,
@@ -31,7 +44,7 @@ class transmart_core::solr inherits transmart_core::params {
     -> service { 'transmart-solr':
         ensure   => running,
         provider => 'systemd',
-        require  => [ Archive::Nexus[$tsdata_tar_file] ],
+        require  => [ Archive::Nexus[$solr_tar_file] ],
     }
 
 }
