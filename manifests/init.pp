@@ -67,13 +67,26 @@ class transmart_core inherits transmart_core::params {
         home       => $home,
         managehome => true,
     }
-
     # Make home only accessible for the user
-    file { $home:
-        ensure  => directory,
-        mode    => '0711',
-        owner   => $user,
-        require => User[$user],
+    -> file { $home:
+        ensure => directory,
+        mode   => '0711',
+        owner  => $user,
+    }
+
+    $tsloader_user = $::transmart_core::params::tsloader_user
+    $tsloader_home = $::transmart_core::params::tsloader_home
+
+    # Create tsloader user.
+    user { $tsloader_user:
+        ensure     => present,
+        home       => $tsloader_home,
+        managehome => true,
+    }
+    -> file { $tsloader_home:
+        ensure => directory,
+        mode   => '0711',
+        owner  => $tsloader_user,
     }
 
     class { '::java':

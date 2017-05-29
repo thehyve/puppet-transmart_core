@@ -5,12 +5,16 @@ class transmart_core::params(
     $nexus_url          = hiera('transmart_core::nexus_url', 'https://repo.thehyve.nl'),
     $repository         = hiera('transmart_core::repository', 'snapshots'),
 
+    $tsloader_user      = hiera('transmart_core::tsloader_user', 'tsloader'),
+    $tsloader_user_home = hiera('transmart_core::tsloader_home', undef),
+
     $db_user            = hiera('transmart_core::db_user', ''),
     $db_password        = hiera('transmart_core::db_password', ''),
     $db_type            = hiera('transmart_core::db_type', 'postgresql'), # or 'oracle'
     $db_host            = hiera('transmart_core::db_host', 'localhost'),
     $db_port_spec       = hiera('transmart_core::db_port', ''),
     $db_name_spec       = hiera('transmart_core::db_name', undef),
+
     $biomart_user_password = hiera('transmart_core::biomart_user_password', 'biomart_user'),
 
     $memory             = hiera('transmart_core::memory', '2g'),
@@ -27,12 +31,6 @@ class transmart_core::params(
     $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
 
     # Database settings
-    if ($db_user == '') {
-        fail('No database user specified. Please configure transmart_core::db_user')
-    }
-    if ($db_password == '') {
-        fail('No database password specified. Please configure transmart_core::db_password')
-    }
     case $db_type {
         'postgresql': {
             $postgresql_params = {
@@ -70,16 +68,23 @@ class transmart_core::params(
         }
     }
 
-    # Set home directory
+    # Set transmart user home directory
     if $user_home == undef {
         $tsuser_home = "/home/${user}"
     } else {
         $tsuser_home = $user_home
     }
 
-    $tsdata_tar_file = "${tsuser_home}/transmart-data-${version}.tar"
+    # Set transmart loader user home directory
+    if $tsloader_user_home == undef {
+        $tsloader_home = "/home/${tsloader_user}"
+    } else {
+        $tsloader_home = $tsloader_user_home
+    }
+
+    $tsdata_tar_file = "${tsloader_home}/transmart-data-${version}.tar"
 
     # Set transmart-data directory
-    $tsdata_dir = "${tsuser_home}/transmart-data-${version}"
+    $tsdata_dir = "${tsloader_home}/transmart-data-${version}"
 }
 
