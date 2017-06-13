@@ -115,7 +115,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 
 ## Test
-The module has been tested on CentOS 7 with Puppet version 3.7.8.
+The module has been tested on CentOS 7 with Puppet version 3.8.7.
 There are some automated tests, run using [rake](https://github.com/ruby/rake).
 
 ### Rake tests
