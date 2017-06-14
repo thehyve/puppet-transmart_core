@@ -22,13 +22,25 @@ ORACLE_MANAGE_TABLESPACES=0
 ORACLE=1
 
 # some versions of transmart-data require this
-# export TABLESPACES=/bogus/
+export TABLESPACES=/bogus/
 
 export ORAHOST ORAPORT ORASID ORAUSER ORAPASSWORD ORACLE_MANAGE_TABLESPACES ORACLE
 <% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
 <% end -%>
 
 TSUSER_HOME=<%= scope.lookupvar('::transmart_core::params::tsuser_home') %>
+
+# {{{ DB user passwords
+#     They default to the same as the username.
+#     These are set when the database is created and they are used when
+#     connecting to the database (e.g. for ETL).
+#     You can reset passwords to the values specified here with:
+#       make -C ddl/postgres/GLOBAL load_passwords
+#       make -C ddl/oracle load_passwords
+#     Depending on whether you're using oracle or postgres.
+export BIOMART_USER_PWD=<%= scope.lookupvar('::transmart_core::params::biomart_user_password') %>
+export TM_CZ_PWD=<%= scope.lookupvar('::transmart_core::params::tm_cz_user_password') %>
+# }}}
 
 export PATH=$DIR/env:$PATH
 export TSUSER_HOME
