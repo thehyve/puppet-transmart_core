@@ -100,14 +100,16 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::nexus_url` | `https://repo.thehyve.nl` | The Nexus/Maven repository server. |
 | `transmart_core::repository` | `snapshots` | The repository to use. [`snapshots`, `releases`] |
 | `transmart_core::user` | `transmart` | System user that runs the application. |
+| `transmart_core::user_home` | `/home/${user}` | The user home directory |
 | `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
 | `transmart_core::db_user` | | The database admin username. (Mandatory) |
 | `transmart_core::db_password` | | The database admin password. (Mandatory) |
-| `transmart_core::db_user` | | The database user. (Mandatory) |
 | `transmart_core::db_type` | | The database type. [`postgresql`, `oracle`] |
 | `transmart_core::db_host` | `localhost` | The database server host name. |
-| `transmart_core::db_post` | `5432` / `1521` | The database server port. |
+| `transmart_core::db_port` | `5432` / `1521` | The database server port. |
+| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. |
 | `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
+| `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
 | `transmart_core::memory` | `2g` | The memory limit for the JVM. |
 | `transmart_core::app_port` | `8080` | The port the `transmart-app` application runs on. |
 | `transmart_core::transmart_url` | | The external address of the application. |
