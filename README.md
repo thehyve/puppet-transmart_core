@@ -115,15 +115,27 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 
 ## Test
-The module has been tested on CentOS 7 with Puppet version 3.8.7.
+The module has been tested on Ubuntu 16.04, Ubuntu 17.04 and CentOS 7 with Puppet version 3.8.7.
 There are some automated tests, run using [rake](https://github.com/ruby/rake).
 
+A version of `ruby` before `2.3` is required. [rvm](https://rvm.io/) can be used to install a specific version of `ruby`.
+Use `rvm install 2.1` to use `ruby` version `2.1`.
+
+The tests are automatically run on our Bamboo server: [PUPPET-PUPPETTS](https://ci.ctmmtrait.nl/browse/PUPPET-PUPPETTS).
+
 ### Rake tests
-Install rake:
+Install rake using the system-wide `ruby`:
 ```bash
 yum install ruby-devel
 gem install bundler
-export PUPPET_VERSION=$(puppet --version)
+export PUPPET_VERSION=3.8.7
+bundle
+```
+or using `rvm`:
+```bash
+rvm install 2.1
+gem install bundler
+export PUPPET_VERSION=3.8.7
 bundle
 ```
 Run the test suite:
