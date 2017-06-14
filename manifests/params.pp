@@ -16,6 +16,7 @@ class transmart_core::params(
     $db_name_spec       = hiera('transmart_core::db_name', undef),
 
     $biomart_user_password = hiera('transmart_core::biomart_user_password', 'biomart_user'),
+    $tm_cz_user_password = hiera('transmart_core::tm_cz_user_password', 'tm_cz'),
 
     $memory             = hiera('transmart_core::memory', '2g'),
     $app_port           = hiera('transmart_core::app_port', '8080'),
