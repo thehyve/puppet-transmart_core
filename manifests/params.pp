@@ -59,9 +59,9 @@ class transmart_core::params(
             if $db_name_spec {
                 $db_name = $db_name_spec
             } else {
-                $db_name = 'orcl'
+                $db_name = 'ORCL'
             }
-            $db_url = "jdbc:oracle:thin:@${db_host}:${db_port}/${db_name}"
+            $db_url = "jdbc:oracle:thin:@${db_host}:${db_port}:${db_name}"
         }
         default: {
             fail("Unsupported database type: '${db_type}'. Options: postgresql, oracle.")
