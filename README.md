@@ -61,6 +61,8 @@ java::package: java-1.8.0-openjdk
 
 transmart_core:db_type: oracle
 transmart_core::db_password: my secret
+transmart_core::db_host: 10.0.2.2
+transmart_core::db_port: 1521
 transmart_core::version: 17.1-PRERELEASE
 ```
 
@@ -69,51 +71,66 @@ The module expects at least the `java::package` to be configured (&geq; jdk 1.8.
 ---
 java::package: java-1.8.0-openjdk
 ```
+Location of a file with default settings for hiera: /etc/puppet/hieradata/default.yaml 
 
+## Installation
+Apply a manifest that generates configuration files and installs: 
+- transmart-app
+- transmart-data (the database provisioning repository)
+- solr
+- rserve
 
-## Classes
+```bash
+sudo puppet apply --modulepath=$modulepath examples/complete.pp
+```
+`modulepath` - is a list of directories puppet will find modules in, separated by the system path-separator character (on Ubuntu/CentOS it is ":").
+Example:
+```bash
+sudo puppet apply --modulepath=/home/$user/puppet/:/etc/puppet/modules examples/complete.pp
+```
 
-Overview of the classes defined in this module.
+### Database installation
+To install `postgresql` with the database admin credentials and required tablespace directories, run:
+```bash
+sudo puppet apply --modulepath=$modulepath examples/postgres.pp
+```
 
-| Class name | Description |
-|------------|-------------|
-| `::transmart_core` | Creates the system users. |
-| `::transmart_core::config` | Generates the application configuration. |
-| `::transmart_core::backend` | Installs the `transmart-app` service. |
-| `::transmart_core::solr` | Installs the `transmart-solr` service. |
-| `::transmart_core::rserve` | Installs the `transmart-rserve` service. |
-| `::transmart_core::data` | Installs `transmart-data` in the `tsloader` home directory. |
-| `::transmart_core::batch` | Installs `transmart-batch` in the `tsloader` home directory. |
-| `::transmart_core::database` | Installs `postgresql` with the database admin credentials and required tablespace directories. |
-| `::transmart_core::complete` | Installs all of the above. |
+Source the `vars` file:
+```bash
+cd /home/transmart/transmart-data-17.1-SNAPSHOT
+. ./vars
+```
+Create the database and load everything:
+```bash
+make -j4 postgres
 
+make -j4 oracle
+```
+Create the database and load test data:
+```bash
+make -j4 postgres_test
 
+make -j4 oracle_test
+```
 
-## Hiera parameters
+## Manage Systemd Services 
 
-Overview of the parameters that can be used in Hiera to configure the module.
-Alternatively, the parameters of the `::transmart_core::params` class can be used to configure these settings.
-
-| Hiera key | Default value | Description |
-|-----------|---------------|-------------|
-| `transmart_core::version` | `17.1-SNAPSHOT` | The version of the TranSMART artefacts to install. |
-| `transmart_core::nexus_url` | `https://repo.thehyve.nl` | The Nexus/Maven repository server. |
-| `transmart_core::repository` | `snapshots` | The repository to use. [`snapshots`, `releases`] |
-| `transmart_core::user` | `transmart` | System user that runs the application. |
-| `transmart_core::user_home` | `/home/${user}` | The user home directory |
-| `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
-| `transmart_core::db_user` | | The database admin username. (Mandatory) |
-| `transmart_core::db_password` | | The database admin password. (Mandatory) |
-| `transmart_core::db_type` | | The database type. [`postgresql`, `oracle`] |
-| `transmart_core::db_host` | `localhost` | The database server host name. |
-| `transmart_core::db_port` | `5432` / `1521` | The database server port. |
-| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. |
-| `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
-| `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
-| `transmart_core::memory` | `2g` | The memory limit for the JVM. |
-| `transmart_core::app_port` | `8080` | The port the `transmart-app` application runs on. |
-| `transmart_core::transmart_url` | | The external address of the application. |
-
+Start transmart-app service:
+```bash
+sudo systemctl start transmart-app
+```
+Check a status of the service:
+```bash
+sudo systemctl status transmart-app
+```
+Stop the service:
+```bash
+sudo systemctl stop transmart-app
+```
+Check a full log of service build
+```bash
+journalctl -u transmart-app - build log
+```
 
 
 ## Test
@@ -144,6 +161,48 @@ Run the test suite:
 ```bash
 rake test
 ```
+
+## Classes
+
+Overview of the classes defined in this module.
+
+| Class name | Description |
+|------------|-------------|
+| `::transmart_core` | Creates the system users. |
+| `::transmart_core::config` | Generates the application configuration. |
+| `::transmart_core::backend` | Installs the `transmart-app` service. |
+| `::transmart_core::solr` | Installs the `transmart-solr` service. |
+| `::transmart_core::rserve` | Installs the `transmart-rserve` service. |
+| `::transmart_core::data` | Installs `transmart-data` in the `tsloader` home directory. |
+| `::transmart_core::batch` | Installs `transmart-batch` in the `tsloader` home directory. |
+| `::transmart_core::complete` | Installs all of the above. |
+| `::transmart_core::database` | Installs `postgresql` with the database admin credentials and required tablespace directories. |
+
+
+## Hiera parameters
+
+Overview of the parameters that can be used in Hiera to configure the module.
+Alternatively, the parameters of the `::transmart_core::params` class can be used to configure these settings.
+
+| Hiera key | Default value | Description |
+|-----------|---------------|-------------|
+| `transmart_core::version` | `17.1-SNAPSHOT` | The version of the TranSMART artefacts to install. |
+| `transmart_core::nexus_url` | `https://repo.thehyve.nl` | The Nexus/Maven repository server. |
+| `transmart_core::repository` | `snapshots` | The repository to use. [`snapshots`, `releases`] |
+| `transmart_core::user` | `transmart` | System user that runs the application. |
+| `transmart_core::user_home` | `/home/${user}` | The user home directory |
+| `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
+| `transmart_core::db_user` | | The database admin username. (Mandatory) |
+| `transmart_core::db_password` | | The database admin password. (Mandatory) |
+| `transmart_core::db_type` | | The database type. [`postgresql`, `oracle`] |
+| `transmart_core::db_host` | `localhost` | The database server host name. |
+| `transmart_core::db_port` | `5432` / `1521` | The database server port. |
+| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. |
+| `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
+| `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
+| `transmart_core::memory` | `2g` | The memory limit for the JVM. |
+| `transmart_core::app_port` | `8080` | The port the `transmart-app` application runs on. |
+| `transmart_core::transmart_url` | | The external address of the application. |
 
 
 ## License
