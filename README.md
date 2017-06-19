@@ -19,6 +19,7 @@ which is expected to be released later this year.
 
 ## Dependencies and installation
 
+### Puppet modules
 Install the `maven`, `archive` and `java` modules as `root`:
 ```bash
 sudo puppet module install maestrodev-maven
@@ -30,32 +31,54 @@ If you want to let the module install PostgreSQL as well, install the `postgresq
 sudo puppet module install puppetlabs-postgresql
 ```
 
+### The `transmart_core` module
 Copy the `transmart_core` module repository to the `/etc/puppet/modules` directory:
 ```bash
 cd /etc/puppet/modules
 git clone https://github.com/thehyve/puppet-transmart_core.git transmart_core
 ```
 
+### Hiera
+Configure `/etc/puppet/hiera.yaml`. Example:
+```yaml
+---
+:backends:
+  - yaml
+:yaml:
+  :datadir: '/etc/puppet/hieradata'
+:hierarchy:
+  - '%{::clientcert}'
+  - 'default'
+```
+Defaults can then be configured in `/etc/puppet/hieradata/default.yaml`:
+```yaml
+---
+java::package: java-1.8.0-openjdk
+
+transmart_core::db_type: postgresql
+```
+Machine specific configuration should be in `/etc/puppet/hieradata/${hostname}.yaml`, e.g.,
+`/etc/puppet/hieradata/example.thehyve.net.yaml`:
+```yaml
+---
+transmart_core::db_user: test
+transmart_core::memory: 4g
+transmart_core::transmart_url: https://example.thehyve.net
+```
+
 
 ## Example
 
-Example `manifests/transmart-test.pp`:
+Example manifest file `manifests/transmart-test.example.com.pp`:
 ```puppet
 node 'transmart-test.example.com' {
     include ::transmart_core::complete
 }
 ```
+This installs `transmart-app`, `solr`, `rserve` and `transmart-data`.
 
-Configuring the installation can be done with:
-```puppet
-class { '::transmart_core::params':
-    db_type     => 'oracle',
-    db_password => 'my secret',
-    version     => '17.1-PRERELEASE',
-}
-```
-If you are using `hiera` for configuration, you can do this with:
-```hiera
+Configuring the installation can be done in `/etc/puppet/hieradata/transmart-test.example.com.yaml` with:
+```yaml
 ---
 java::package: java-1.8.0-openjdk
 
@@ -63,22 +86,31 @@ transmart_core:db_type: oracle
 transmart_core::db_password: my secret
 transmart_core::db_host: 10.0.2.2
 transmart_core::db_port: 1521
-transmart_core::version: 17.1-PRERELEASE
+```
+
+Alternatively, the host specific configuration can also be done with class parameters in `manifests/transmart-test.example.com.pp`:
+```puppet
+class { '::transmart_core::params':
+    db_type     => 'oracle',
+    db_password => 'my secret',
+}
 ```
 
 The module expects at least the `java::package` to be configured (&geq; jdk 1.8.0), e.g.:
-```hiera
+```yaml
 ---
 java::package: java-1.8.0-openjdk
 ```
-Location of a file with default settings for hiera: /etc/puppet/hieradata/default.yaml 
+It is a good idea to put this in the `default.yaml`.
 
-## Installation
-Apply a manifest that generates configuration files and installs: 
-- transmart-app
-- transmart-data (the database provisioning repository)
-- solr
-- rserve
+
+## Masterless installation
+Instructions on installing the `examples/complete.pp` manifest without a puppet master (using `puppet apply`).
+This generates the required configuration files and installs: 
+- `transmart-app`
+- `solr`
+- `rserve`
+- `transmart-data` (the database provisioning repository, in the home directory of user `tsloader`)
 
 ```bash
 sudo puppet apply --modulepath=$modulepath examples/complete.pp
@@ -95,9 +127,9 @@ To install `postgresql` with the database admin credentials and required tablesp
 sudo puppet apply --modulepath=$modulepath examples/postgres.pp
 ```
 
-Source the `vars` file:
+Source the `vars` file (as user `tsloader`):
 ```bash
-cd /home/transmart/transmart-data-17.1-SNAPSHOT
+cd /home/tsloader/transmart-data-17.1-SNAPSHOT
 . ./vars
 ```
 Create the database and load everything:
@@ -113,9 +145,10 @@ make -j4 postgres_test
 make -j4 oracle_test
 ```
 
-## Manage Systemd Services 
 
-Start transmart-app service:
+## Manage `systemd` services 
+
+Start `transmart-app` service:
 ```bash
 sudo systemctl start transmart-app
 ```
@@ -134,7 +167,7 @@ journalctl -u transmart-app - build log
 
 
 ## Test
-The module has been tested on Ubuntu 16.04, Ubuntu 17.04 and CentOS 7 with Puppet version 3.8.7.
+The module has been tested on Ubuntu 16.04 and CentOS 7 with Puppet version 3.8.7.
 There are some automated tests, run using [rake](https://github.com/ruby/rake).
 
 A version of `ruby` before `2.3` is required. [rvm](https://rvm.io/) can be used to install a specific version of `ruby`.
