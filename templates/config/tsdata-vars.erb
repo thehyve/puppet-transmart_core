@@ -9,7 +9,7 @@ PGUSER=<%= scope.lookupvar('::transmart_core::params::db_user') %>
 PGPASSWORD='<%= scope.lookupvar('::transmart_core::params::db_password') -%>'
 
 TABLESPACES=<%= scope.lookupvar('::transmart_core::params::tablespaces_dir') %>/
-PGSQL_BIN="sudo -E -u postgres /usr/bin/"
+PGSQL_BIN="/usr/bin/"
 
 export PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD TABLESPACES PGSQL_BIN
 <% when 'oracle' -%>
