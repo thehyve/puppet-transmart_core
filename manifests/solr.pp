@@ -32,7 +32,7 @@ class transmart_core::solr inherits transmart_core::params {
         owner   => $user,
         mode    => '0744',
         content => template('transmart_core/solr.erb'),
-        notify  => Service['transmart-app'],
+        notify  => Service['transmart-server'],
     }
     -> file { '/etc/systemd/system/transmart-solr.service':
         ensure  => file,
