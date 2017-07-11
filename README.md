@@ -242,12 +242,6 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 Copyright &copy; 2017  The Hyve.
 
-The puppet module for TranSMART is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the [GNU General Public License](gpl-3.0.txt) along with this program. If not, see https://www.gnu.org/licenses/.
+Use of the puppet module for TranSMART by Institut de Recherches Servier (IDRS) is subject to the terms in the Puppet Scripts License Agreement between 
+The Hyve B.V. and IDRS.
 
