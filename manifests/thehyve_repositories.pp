@@ -1,3 +1,4 @@
+# Copyright 2017 The Hyve.
 class transmart_core::thehyve_repositories {
     if $::osfamily == 'Debian' {
         require ::apt

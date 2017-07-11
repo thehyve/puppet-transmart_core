@@ -1,3 +1,4 @@
+# Copyright 2017 The Hyve.
 class transmart_core::params(
     $user               = hiera('transmart_core::user', 'transmart'),
     $user_home          = hiera('transmart_core::user_home', undef),

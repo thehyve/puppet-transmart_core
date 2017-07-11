@@ -1,3 +1,4 @@
+# Copyright 2017 The Hyve.
 class transmart_core::data inherits transmart_core::params {
     include ::transmart_core
 
