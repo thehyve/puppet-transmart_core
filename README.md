@@ -129,7 +129,7 @@ sudo puppet apply --modulepath=$modulepath examples/postgres.pp
 
 Source the `vars` file (as user `tsloader`):
 ```bash
-cd /home/tsloader/transmart-data-17.1-SNAPSHOT
+cd /home/tsloader/transmart-data-17.1-RC1
 . ./vars
 ```
 Create the database and load everything:
@@ -219,9 +219,9 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 | Hiera key | Default value | Description |
 |-----------|---------------|-------------|
-| `transmart_core::version` | `17.1-SNAPSHOT` | The version of the TranSMART artefacts to install. |
+| `transmart_core::version` | `17.1-RC1` | The version of the TranSMART artefacts to install. |
 | `transmart_core::nexus_url` | `https://repo.thehyve.nl` | The Nexus/Maven repository server. |
-| `transmart_core::repository` | `snapshots` | The repository to use. [`snapshots`, `releases`] |
+| `transmart_core::repository` | `releases` | The repository to use. [`snapshots`, `releases`] |
 | `transmart_core::user` | `transmart` | System user that runs the application. |
 | `transmart_core::user_home` | `/home/${user}` | The user home directory |
 | `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
