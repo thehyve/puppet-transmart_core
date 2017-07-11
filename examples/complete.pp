@@ -1,6 +1,6 @@
 #
 # An example of a manifest file which fetches installs:
-# - transmart-app
+# - transmart-server
 # - transmart-data (the database provisioning repository)
 # - postgresql
 # - solr

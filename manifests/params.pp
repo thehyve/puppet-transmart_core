@@ -1,9 +1,10 @@
+# Copyright 2017 The Hyve.
 class transmart_core::params(
     $user               = hiera('transmart_core::user', 'transmart'),
     $user_home          = hiera('transmart_core::user_home', undef),
-    $version            = hiera('transmart_core::version', '17.1-SNAPSHOT'),
+    $version            = hiera('transmart_core::version', '17.1-RC1'),
     $nexus_url          = hiera('transmart_core::nexus_url', 'https://repo.thehyve.nl'),
-    $repository         = hiera('transmart_core::repository', 'snapshots'),
+    $repository         = hiera('transmart_core::repository', 'releases'),
 
     $tsloader_user      = hiera('transmart_core::tsloader_user', 'tsloader'),
     $tsloader_user_home = hiera('transmart_core::tsloader_home', undef),

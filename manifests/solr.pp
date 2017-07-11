@@ -1,3 +1,4 @@
+# Copyright 2017 The Hyve.
 class transmart_core::solr inherits transmart_core::params {
     include ::transmart_core
     include ::transmart_core::data
@@ -32,7 +33,7 @@ class transmart_core::solr inherits transmart_core::params {
         owner   => $user,
         mode    => '0744',
         content => template('transmart_core/solr.erb'),
-        notify  => Service['transmart-app'],
+        notify  => Service['transmart-server'],
     }
     -> file { '/etc/systemd/system/transmart-solr.service':
         ensure  => file,

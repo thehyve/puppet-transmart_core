@@ -13,7 +13,7 @@
 # The home directory where the application files are stored (default: /home/${user}).
 #
 # * `version`
-# Version of the TranSMART artefacts in Nexus (default: 17.1-SNAPSHOT).
+# Version of the TranSMART artefacts in Nexus (default: 17.1-RC1).
 #
 # * `nexus_url`
 # The url of the repository to fetch the TranSMART artefacts from

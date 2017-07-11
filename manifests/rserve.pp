@@ -1,3 +1,4 @@
+# Copyright 2017 The Hyve.
 class transmart_core::rserve inherits transmart_core::params {
     require ::transmart_core
     require ::transmart_core::thehyve_repositories

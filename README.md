@@ -7,7 +7,7 @@ can be found on the TranSMART Foundation website, and the TranSMART Foundation's
 can be found at <https://github.com/transmart/>.
 
 The module creates system users `transmart` and `tsloader` (unless they are configured to different names),
-installs and configures services `transmart-app`, `transmart-solr` and `transmart-rserve`
+installs and configures services `transmart-server`, `transmart-solr` and `transmart-rserve`
 (`systemd` processes run as user `transmart`),
 and downloads and configures dataloading tools `transmart-data` and `transmart-batch` in the home directory of
 user `tsloader`.
@@ -75,7 +75,7 @@ node 'transmart-test.example.com' {
     include ::transmart_core::complete
 }
 ```
-This installs `transmart-app`, `solr`, `rserve` and `transmart-data`.
+This installs `transmart-server`, `solr`, `rserve` and `transmart-data`.
 
 Configuring the installation can be done in `/etc/puppet/hieradata/transmart-test.example.com.yaml` with:
 ```yaml
@@ -107,7 +107,7 @@ It is a good idea to put this in the `default.yaml`.
 ## Masterless installation
 Instructions on installing the `examples/complete.pp` manifest without a puppet master (using `puppet apply`).
 This generates the required configuration files and installs: 
-- `transmart-app`
+- `transmart-server`
 - `solr`
 - `rserve`
 - `transmart-data` (the database provisioning repository, in the home directory of user `tsloader`)
@@ -129,7 +129,7 @@ sudo puppet apply --modulepath=$modulepath examples/postgres.pp
 
 Source the `vars` file (as user `tsloader`):
 ```bash
-cd /home/tsloader/transmart-data-17.1-SNAPSHOT
+cd /home/tsloader/transmart-data-17.1-RC1
 . ./vars
 ```
 Create the database and load everything:
@@ -148,21 +148,21 @@ make -j4 oracle_test
 
 ## Manage `systemd` services 
 
-Start `transmart-app` service:
+Start `transmart-server` service:
 ```bash
-sudo systemctl start transmart-app
+sudo systemctl start transmart-server
 ```
 Check a status of the service:
 ```bash
-sudo systemctl status transmart-app
+sudo systemctl status transmart-server
 ```
 Stop the service:
 ```bash
-sudo systemctl stop transmart-app
+sudo systemctl stop transmart-server
 ```
 Check a full log of service build
 ```bash
-journalctl -u transmart-app - build log
+journalctl -u transmart-server - build log
 ```
 
 
@@ -203,7 +203,7 @@ Overview of the classes defined in this module.
 |------------|-------------|
 | `::transmart_core` | Creates the system users. |
 | `::transmart_core::config` | Generates the application configuration. |
-| `::transmart_core::backend` | Installs the `transmart-app` service. |
+| `::transmart_core::backend` | Installs the `transmart-server` service. |
 | `::transmart_core::solr` | Installs the `transmart-solr` service. |
 | `::transmart_core::rserve` | Installs the `transmart-rserve` service. |
 | `::transmart_core::data` | Installs `transmart-data` in the `tsloader` home directory. |
@@ -219,9 +219,9 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 | Hiera key | Default value | Description |
 |-----------|---------------|-------------|
-| `transmart_core::version` | `17.1-SNAPSHOT` | The version of the TranSMART artefacts to install. |
+| `transmart_core::version` | `17.1-RC1` | The version of the TranSMART artefacts to install. |
 | `transmart_core::nexus_url` | `https://repo.thehyve.nl` | The Nexus/Maven repository server. |
-| `transmart_core::repository` | `snapshots` | The repository to use. [`snapshots`, `releases`] |
+| `transmart_core::repository` | `releases` | The repository to use. [`snapshots`, `releases`] |
 | `transmart_core::user` | `transmart` | System user that runs the application. |
 | `transmart_core::user_home` | `/home/${user}` | The user home directory |
 | `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
@@ -234,7 +234,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
 | `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
 | `transmart_core::memory` | `2g` | The memory limit for the JVM. |
-| `transmart_core::app_port` | `8080` | The port the `transmart-app` application runs on. |
+| `transmart_core::app_port` | `8080` | The port the `transmart-server` application runs on. |
 | `transmart_core::transmart_url` | | The external address of the application. |
 
 
