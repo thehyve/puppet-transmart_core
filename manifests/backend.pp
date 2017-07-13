@@ -15,14 +15,17 @@ class transmart_core::backend inherits transmart_core::params {
     $jobs_dir = $::transmart_core::params::jobs_directory
 
     # Download the application war
-    maven { $application_war_file:
-        ensure  => latest,
-        user    => $user,
-        id      => "org.transmartproject:transmart-server:${::transmart_core::params::version}:war",
-        repos   => $::transmart_core::params::nexus_repository,
-        require => [ File[$home], Class['maven::maven'] ],
-        notify  => Service['transmart-server'],
+    archive::nexus { $application_war_file:
+        user       => $user,
+        url        => $::transmart_core::params::nexus_url,
+        gav        => "org.transmartproject:transmart-server:${::transmart_core::params::version}",
+        repository => $::transmart_core::params::repository,
+        packaging  => 'war',
+        mode       => '0444',
+        require    => File[$home],
+        notify     => Service['transmart-server'],
     }
+
     file { $logs_dir:
         ensure => directory,
         owner  => $user,
@@ -50,7 +53,7 @@ class transmart_core::backend inherits transmart_core::params {
     -> service { 'transmart-server':
         ensure   => running,
         provider => 'systemd',
-        require  => [ File[$logs_dir], File[$jobs_dir], Maven[$application_war_file] ],
+        require  => [ File[$logs_dir], File[$jobs_dir], Archive::Nexus[$application_war_file] ],
     }
 
 }
