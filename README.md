@@ -20,12 +20,23 @@ which is expected to be released later this year.
 ## Dependencies and installation
 
 ### Puppet modules
-Install the `maven`, `archive` and `java` modules as `root`:
+Install the `archive` and `java` modules as `root`:
 ```bash
-sudo puppet module install maestrodev-maven
 sudo puppet module install puppet-archive
 sudo puppet module install puppetlabs-java
 ```
+Alternatively, the modules can be cloned from `github.com`
+and copied into `/etc/puppet/modules`:
+
+git clone https://github.com/voxpupuli/puppet-archive.git archive
+pushd archive; git checkout v1.3.0; popd
+git clone https://github.com/puppetlabs/puppetlabs-java.git java
+pushd java; git checkout 1.6.0; popd
+git clone https://github.com/puppetlabs/puppetlabs-stdlib stdlib
+pushd stdlib; git checkout 4.17.0; popd
+cp -r archive java stdlib /etc/puppet/modules/
+```
+
 If you want to let the module install PostgreSQL as well, install the `postgresql` module:
 ```bash
 sudo puppet module install puppetlabs-postgresql
@@ -58,26 +69,26 @@ java::package: java-1.8.0-openjdk
 transmart_core::db_type: postgresql
 ```
 Machine specific configuration should be in `/etc/puppet/hieradata/${hostname}.yaml`, e.g.,
-`/etc/puppet/hieradata/example.thehyve.net.yaml`:
+`/etc/puppet/hieradata/test.example.com.yaml`:
 ```yaml
 ---
 transmart_core::db_user: test
 transmart_core::memory: 4g
-transmart_core::transmart_url: https://example.thehyve.net
+transmart_core::transmart_url: https://test.example.com
 ```
 
 
 ## Example
 
-Example manifest file `manifests/transmart-test.example.com.pp`:
+Example manifest file `manifests/test.example.com.pp`:
 ```puppet
-node 'transmart-test.example.com' {
+node 'test.example.com' {
     include ::transmart_core::complete
 }
 ```
 This installs `transmart-server`, `solr`, `rserve` and `transmart-data`.
 
-Configuring the installation can be done in `/etc/puppet/hieradata/transmart-test.example.com.yaml` with:
+Configuring the installation can be done in `/etc/puppet/hieradata/test.example.com.yaml` with:
 ```yaml
 ---
 java::package: java-1.8.0-openjdk
@@ -88,10 +99,11 @@ transmart_core::db_host: 10.0.2.2
 transmart_core::db_port: 1521
 ```
 
-Alternatively, the host specific configuration can also be done with class parameters in `manifests/transmart-test.example.com.pp`:
+Alternatively, the host specific configuration can also be done with class parameters in `manifests/test.example.com.pp`:
 ```puppet
 class { '::transmart_core::params':
     db_type     => 'oracle',
+    db_user     => 'my db user',
     db_password => 'my secret',
 }
 ```
