@@ -27,9 +27,9 @@ sudo puppet module install puppetlabs-java
 ```
 Alternatively, the modules can be cloned from `github.com`
 and copied into `/etc/puppet/modules`:
-
+```bash
 git clone https://github.com/voxpupuli/puppet-archive.git archive
-pushd archive; git checkout v1.3.0; popd
+pushd archive; git checkout v0.5.1; popd
 git clone https://github.com/puppetlabs/puppetlabs-java.git java
 pushd java; git checkout 1.6.0; popd
 git clone https://github.com/puppetlabs/puppetlabs-stdlib stdlib
@@ -101,10 +101,19 @@ transmart_core::db_port: 1521
 
 Alternatively, the host specific configuration can also be done with class parameters in `manifests/test.example.com.pp`:
 ```puppet
-class { '::transmart_core::params':
-    db_type     => 'oracle',
-    db_user     => 'my db user',
-    db_password => 'my secret',
+node 'test.example.com' {
+    # Site specific configuration for Transmart
+    class { '::transmart_core::params':
+        db_type     => 'oracle',
+        db_user     => 'my db user',
+        db_password => 'my secret',
+    }
+    # Optionally, configure a proxy for fetching artefacts
+    Archive::Nexus {
+        #proxy_server => 'http://proxyurl:80',
+    }
+
+    include ::transmart_core::complete
 }
 ```
 
