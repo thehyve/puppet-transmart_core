@@ -27,5 +27,9 @@ class transmart_core::rserve inherits transmart_core::params {
         ensure => running,
         enable => true,
     }
+
+    # Package required for the R scripts
+    package { 'libpng12': }
+
 }
 

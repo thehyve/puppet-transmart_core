@@ -19,6 +19,27 @@ which is expected to be released later this year.
 
 ## Dependencies and installation
 
+Packages that need to be available through the package manager of the operating system:
+- `java-1.8.0-openjdk`
+Requirements for specific components:
+- `rserve`:
+  - `libpng12`
+  - `cairo`
+  - `dejavu-sans-fonts`
+  - `dejavu-sans-mono-fonts`
+  - `dejavu-serif-fonts`
+  - `libgfortran`
+  - `libgomp`
+  - `pango`
+  - `readline`
+  - `urw-fonts`
+  - `xorg-x11-fonts-Type1`
+  - `xorg-x11-fonts-misc`
+- `data`:
+  - `php`
+  - `groovy`
+  - `make`
+
 ### Puppet modules
 Install the `archive` and `java` modules as `root`:
 ```bash
@@ -64,8 +85,6 @@ Configure `/etc/puppet/hiera.yaml`. Example:
 Defaults can then be configured in `/etc/puppet/hieradata/default.yaml`:
 ```yaml
 ---
-java::package: java-1.8.0-openjdk
-
 transmart_core::db_type: postgresql
 ```
 Machine specific configuration should be in `/etc/puppet/hieradata/${hostname}.yaml`, e.g.,
@@ -91,8 +110,6 @@ This installs `transmart-server`, `solr`, `rserve` and `transmart-data`.
 Configuring the installation can be done in `/etc/puppet/hieradata/test.example.com.yaml` with:
 ```yaml
 ---
-java::package: java-1.8.0-openjdk
-
 transmart_core:db_type: oracle
 transmart_core::db_password: my secret
 transmart_core::db_host: 10.0.2.2
@@ -116,13 +133,6 @@ node 'test.example.com' {
     include ::transmart_core::complete
 }
 ```
-
-The module expects at least the `java::package` to be configured (&geq; jdk 1.8.0), e.g.:
-```yaml
----
-java::package: java-1.8.0-openjdk
-```
-It is a good idea to put this in the `default.yaml`.
 
 
 ## Masterless installation
@@ -150,7 +160,7 @@ sudo puppet apply --modulepath=$modulepath examples/postgres.pp
 
 Source the `vars` file (as user `tsloader`):
 ```bash
-cd /home/tsloader/transmart-data-17.1-RC1
+cd /home/tsloader/transmart-data-17.1-RC4
 . ./vars
 ```
 Create the database and load everything:

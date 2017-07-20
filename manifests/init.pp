@@ -31,10 +31,10 @@
 # * `db_host`
 # The hostname of the database server (default: localhost).
 #
-# * `db_port`
+# * `db_port_spec`
 # The port of the database server (default: 5322 if postgres, 1521 if oracle).
 #
-# * `db_name`
+# * `db_name_spec`
 # The name of the application database (default: transmart).
 #
 # Examples
@@ -90,10 +90,10 @@ class transmart_core inherits transmart_core::params {
     }
 
     class { '::java':
+        package => 'java-1.8.0-openjdk',
     }
 
-    # Required for the R library Cairo
-    package { 'libpng12': }
+    require ::transmart_core::thehyve_repositories
 
 }
 
