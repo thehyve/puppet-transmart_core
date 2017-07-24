@@ -24,7 +24,7 @@ class transmart_core::batch inherits transmart_core::params {
         mode    => '0400',
     }
     -> file { "${tsbatch_directory}/transmart-batch":
-        ensure => file,
+        ensure  => file,
         content => template('transmart_core/transmart-batch.erb'),
         mode    => '0755',
     }
