@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+jar="<%= @tsbatch_jar_file %>"
+
+# Choose the location of the java binary
+prefix=
+if [ ! "x${JAVA_HOME}" == "x" ]; then
+    prefix="${JAVA_HOME}/bin/"
+fi
+
+# Run the jar
+${prefix}java -jar "${jar}" $@
+

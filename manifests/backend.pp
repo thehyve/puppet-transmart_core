@@ -5,7 +5,8 @@ class transmart_core::backend inherits transmart_core::params {
 
     $user = $::transmart_core::params::user
     $home = $::transmart_core::params::tsuser_home
-    $application_war_file = "${home}/transmart-server.war"
+    $version = $::transmart_core::params::version
+    $application_war_file = "${home}/transmart-server-${version}.war"
     $memory = $::transmart_core::params::memory
     $java_opts = "-server -Xms${memory} -Xmx${memory} -Djava.awt.headless=true -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true "
     $app_port = $::transmart_core::params::app_port
@@ -18,13 +19,14 @@ class transmart_core::backend inherits transmart_core::params {
     archive::nexus { $application_war_file:
         user       => $user,
         url        => $::transmart_core::params::nexus_url,
-        gav        => "org.transmartproject:transmart-server:${::transmart_core::params::version}",
+        gav        => "org.transmartproject:transmart-server:${version}",
         repository => $::transmart_core::params::repository,
         packaging  => 'war',
         mode       => '0444',
         creates    => $application_war_file,
         require    => File[$home],
         notify     => Service['transmart-server'],
+        cleanup    => false,
     }
 
     file { $logs_dir:
