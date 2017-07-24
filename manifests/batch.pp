@@ -30,7 +30,9 @@ class transmart_core::batch inherits transmart_core::params {
         repository => $::transmart_core::params::repository,
         packaging  => 'jar',
         mode       => '0444',
+        creates    => $tsbatch_jar_file,
         require    => File[$tsbatch_directory],
+        cleanup    => false,
     }
 
 }

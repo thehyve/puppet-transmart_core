@@ -22,6 +22,7 @@ class transmart_core::backend inherits transmart_core::params {
         repository => $::transmart_core::params::repository,
         packaging  => 'war',
         mode       => '0444',
+        creates    => $application_war_file,
         require    => File[$home],
         notify     => Service['transmart-server'],
     }

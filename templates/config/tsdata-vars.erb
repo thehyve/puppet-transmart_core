@@ -42,5 +42,14 @@ export BIOMART_USER_PWD=<%= scope.lookupvar('::transmart_core::params::biomart_u
 export TM_CZ_PWD=<%= scope.lookupvar('::transmart_core::params::tm_cz_user_password') %>
 # }}}
 
+# The Oracle driver uses the blocking random pool by default
+# This is a bad idea because successive connections WILL exhaust the pool
+# /dev/urandom is just as secure, provided it's been seeded already
+export _JAVA_OPTIONS='-Djava.security.egd=file:///dev/urandom'
+
+# If you need to proxy
+# export _JAVA_OPTIONS="${_JAVA_OPTIONS} -Dhttp.proxyHost=$proxy_host -Dhttp.proxyPort=$proxy_port"
+
 export PATH=$DIR/env:$PATH
 export TSUSER_HOME
+
