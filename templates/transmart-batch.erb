@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+properties="<%= @properties_file %>"
 jar="<%= @tsbatch_jar_file %>"
 
 # Choose the location of the java binary
@@ -9,5 +10,5 @@ if [ ! "x${JAVA_HOME}" == "x" ]; then
 fi
 
 # Run the jar
-${prefix}java -jar "${jar}" $@
+${prefix}java -jar "${jar}" -c "${properties}" $@
 
