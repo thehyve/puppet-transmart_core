@@ -19,10 +19,11 @@ which is expected to be released later this year.
 
 ## Dependencies and installation
 
-Packages that need to be available through the package manager of the operating system:
-- `java-1.8.0-openjdk`
-Requirements for specific components:
-- `rserve`:
+### Operating system packages
+The module expects certain packages to be available through the package manager of the operating system (e.g., `yum` or `apt`):
+- For all components:
+  - `java-1.8.0-openjdk`
+- For `transmart-rserve`:
   - `libpng12`
   - `cairo`
   - `dejavu-sans-fonts`
@@ -35,18 +36,20 @@ Requirements for specific components:
   - `urw-fonts`
   - `xorg-x11-fonts-Type1`
   - `xorg-x11-fonts-misc`
-- `data`:
+- For `transmart-data`:
   - `php`
   - `groovy`
   - `make`
 
 ### Puppet modules
-Install the `archive` and `java` modules as `root`:
+The module depends on the `archive` and `java` puppet modules.
+
+The most convenient way is to run `puppet module install` as `root`:
 ```bash
 sudo puppet module install puppet-archive
 sudo puppet module install puppetlabs-java
 ```
-Alternatively, the modules can be cloned from `github.com`
+Alternatively, the modules and their dependencies can be cloned from `github.com`
 and copied into `/etc/puppet/modules`:
 ```bash
 git clone https://github.com/voxpupuli/puppet-archive.git archive
@@ -63,15 +66,34 @@ If you want to let the module install PostgreSQL as well, install the `postgresq
 sudo puppet module install puppetlabs-postgresql
 ```
 
-### The `transmart_core` module
+### Install the `transmart_core` module
 Copy the `transmart_core` module repository to the `/etc/puppet/modules` directory:
 ```bash
 cd /etc/puppet/modules
 git clone https://github.com/thehyve/puppet-transmart_core.git transmart_core
 ```
 
-### Hiera
-Configure `/etc/puppet/hiera.yaml`. Example:
+## Configuration
+
+### The node manifest
+
+For each node where you want to install TranSMART, the module needs to be included with
+`include ::transmart_core::complete`.
+
+Here is an example manifest file `manifests/test.example.com.pp`:
+```puppet
+node 'test.example.com' {
+    include ::transmart_core::complete
+}
+```
+This installs `transmart-server`, `solr`, `rserve`, `transmart-data`, and `transmart-batch`.
+The node manifest can also be in another file, e.g., `site.pp`.
+
+### Configuring a node using Hiera
+
+It is preferred to configure the module parameters using Hiera.
+
+To activate the use of Hiera, configure `/etc/puppet/hiera.yaml`. Example:
 ```yaml
 ---
 :backends:
@@ -82,108 +104,117 @@ Configure `/etc/puppet/hiera.yaml`. Example:
   - '%{::clientcert}'
   - 'default'
 ```
-Defaults can then be configured in `/etc/puppet/hieradata/default.yaml`:
+Defaults can then be configured in `/etc/puppet/hieradata/default.yaml`, e.g.:
 ```yaml
 ---
 transmart_core::db_type: postgresql
 ```
+
 Machine specific configuration should be in `/etc/puppet/hieradata/${hostname}.yaml`, e.g.,
 `/etc/puppet/hieradata/test.example.com.yaml`:
 ```yaml
 ---
-transmart_core::db_user: test
+transmart_core::db_user: test as sysdba
+transmart_core::db_type: oracle
+transmart_core::db_password: my secret
+transmart_core::db_host: 10.0.2.2
+transmart_core::db_name: transmart
+transmart_core::db_port: 1521
 transmart_core::memory: 4g
 transmart_core::transmart_url: https://test.example.com
 ```
 
+### Configuring a node in the manifest file
 
-## Example
-
-Example manifest file `manifests/test.example.com.pp`:
-```puppet
-node 'test.example.com' {
-    include ::transmart_core::complete
-}
-```
-This installs `transmart-server`, `solr`, `rserve` and `transmart-data`.
-
-Configuring the installation can be done in `/etc/puppet/hieradata/test.example.com.yaml` with:
-```yaml
----
-transmart_core:db_type: oracle
-transmart_core::db_password: my secret
-transmart_core::db_host: 10.0.2.2
-transmart_core::db_port: 1521
-```
-
-Alternatively, the host specific configuration can also be done with class parameters in `manifests/test.example.com.pp`:
+Alternatively, the node specific configuration can also be done with class parameters in the node manifest.
+Here is an example:
 ```puppet
 node 'test.example.com' {
     # Site specific configuration for Transmart
     class { '::transmart_core::params':
-        db_type     => 'oracle',
-        db_user     => 'my db user',
-        db_password => 'my secret',
-    }
-    # Optionally, configure a proxy for fetching artefacts
-    Archive::Nexus {
-        #proxy_server => 'http://proxyurl:80',
+        db_type      => 'oracle',
+        db_user      => 'test as sysdba',
+        db_password  => 'my secret',
+        db_port_spec => 1521,
+        db_name_spec => 'transmart,
     }
 
     include ::transmart_core::complete
+}
+```
+Node the use of `db_port_spec` and `db_name_spec` instead of `db_port` and `db_name` here.
+
+### Configuring the use of a proxy
+```puppet
+node 'test.example.com' {
+    ...
+
+    # Configure a proxy for fetching artefacts
+    Archive::Nexus {
+        proxy_server => 'http://proxyurl:80',
+    }
+    # Configure a proxy for fetching packages with yum
+    Yumrepo {
+        proxy => 'http://proxyurl:80',
+    }
 }
 ```
 
 
 ## Masterless installation
-Instructions on installing the `examples/complete.pp` manifest without a puppet master (using `puppet apply`).
-This generates the required configuration files and installs: 
-- `transmart-server`
-- `solr`
-- `rserve`
-- `transmart-data` (the database provisioning repository, in the home directory of user `tsloader`)
+It is also possible to use the module without a Puppet master by applying a manifest directly using `puppet apply`.
+
+There is an example manifest in `examples/complete.pp` for generating the required configuration files and installing
+`transmart-server`, `solr`, `rserve`, `transmart-data`, and `transmart-batch`.
 
 ```bash
-sudo puppet apply --modulepath=$modulepath examples/complete.pp
+sudo puppet apply --modulepath=${modulepath} examples/complete.pp
 ```
-`modulepath` - is a list of directories puppet will find modules in, separated by the system path-separator character (on Ubuntu/CentOS it is ":").
+where `modulepath` is a list of directories where Puppet can find modules in, separated by the system path-separator character (on Ubuntu/CentOS it is `:`).
 Example:
 ```bash
-sudo puppet apply --modulepath=/home/$user/puppet/:/etc/puppet/modules examples/complete.pp
+sudo puppet apply --modulepath=${HOME}/puppet/:/etc/puppet/modules examples/complete.pp
 ```
 
-### Database installation
+## Database installation and preparation
+
+### Create a PostgreSQL database
 To install `postgresql` with the database admin credentials and required tablespace directories, run:
 ```bash
-sudo puppet apply --modulepath=$modulepath examples/postgres.pp
+sudo puppet apply --modulepath=${modulepath} examples/postgres.pp
 ```
 
+### Prepare the database for TranSMART
 Source the `vars` file (as user `tsloader`):
 ```bash
-cd /home/tsloader/transmart-data-17.1-RC4
-. ./vars
+sudo -iu tsloader
+cd ~/transmart-data-17.1-*
+source ./vars
 ```
-Create the database and load everything:
+Create the database and load essential data:
 ```bash
+# For PostgreSQL
 make -j4 postgres
 
+# For Oracle
 make -j4 oracle
 ```
 Create the database and load test data:
 ```bash
+# For PostgreSQL
 make -j4 postgres_test
 
+# For Oracle
 make -j4 oracle_test
 ```
 
-
 ## Manage `systemd` services 
 
-Start `transmart-server` service:
+Start the `transmart-server` service:
 ```bash
 sudo systemctl start transmart-server
 ```
-Check a status of the service:
+Check the status of the service:
 ```bash
 sudo systemctl status transmart-server
 ```
@@ -243,7 +274,7 @@ Overview of the classes defined in this module.
 | `::transmart_core::database` | Installs `postgresql` with the database admin credentials and required tablespace directories. |
 
 
-## Hiera parameters
+## Module parameters
 
 Overview of the parameters that can be used in Hiera to configure the module.
 Alternatively, the parameters of the `::transmart_core::params` class can be used to configure these settings.
@@ -260,8 +291,8 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::db_password` | | The database admin password. (Mandatory) |
 | `transmart_core::db_type` | | The database type. [`postgresql`, `oracle`] |
 | `transmart_core::db_host` | `localhost` | The database server host name. |
-| `transmart_core::db_port` | `5432` / `1521` | The database server port. |
-| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. |
+| `transmart_core::db_port` | `5432` / `1521` | The database server port. (`db_port_spec` in the `params` class.) |
+| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. (`db_name_spec` in the `params` class.) |
 | `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
 | `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
 | `transmart_core::memory` | `2g` | The memory limit for the JVM. |
