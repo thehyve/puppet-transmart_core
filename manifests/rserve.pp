@@ -18,6 +18,16 @@ class transmart_core::rserve inherits transmart_core::params {
         mode   => '0755',
         source => 'puppet:///modules/transmart_core/rserve',
     }
+    -> file { "/etc/init.d/transmart-rserve":
+        ensure => file,
+        owner  => $user,
+        mode   => '0755',
+        source => 'puppet:///modules/transmart_core/rserve',
+    }
+    -> file { '/etc/Rserve.conf':
+        ensure =>  file,
+        content => "daemon=1",
+    }
     -> file { '/etc/systemd/system/transmart-rserve.service':
         ensure  => file,
         mode    => '0644',
@@ -29,7 +39,7 @@ class transmart_core::rserve inherits transmart_core::params {
     }
 
     # Package required for the R scripts
-    package { 'libpng12': }
+    package { 'libpng12-0': }
 
 }
 
