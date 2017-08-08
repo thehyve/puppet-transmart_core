@@ -16,9 +16,13 @@ class transmart_core::thehyve_repositories {
                 location    => 'http://apt.thehyve.net/internal/',
                 release     => $release,
                 repos       => 'main',
-                key         => '79cbff36340878cfb6a09bbecf5b7bd93375da21',
-                key_server  => 'keyserver.ubuntu.com',
-                include_src => false,
+                key         => {
+			'id' =>  '79cbff36340878cfb6a09bbecf5b7bd93375da21',
+                	'server'  => 'keyserver.ubuntu.com',
+                },
+		include => {
+			'src' => false,
+		}
             }
         }
 
