@@ -36,7 +36,7 @@ class transmart_core::params(
     case $db_type {
         'postgresql': {
             $postgresql_params = {
-                version             => '9.4',
+                version             => '9.5',
                 manage_package_repo => true,
             }
             $tablespaces_dir = "/var/lib/pgsql/${postgresql_params[version]}/data/tablespaces"
