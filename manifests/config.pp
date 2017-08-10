@@ -18,6 +18,7 @@ class transmart_core::config inherits transmart_core::params {
         ensure  => file,
         content => template('transmart_core/config/application.groovy.erb'),
         mode    => '0400',
+#        notify  => Service['transmart-server'],
     }
 
 }
