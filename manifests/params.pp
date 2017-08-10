@@ -1,33 +1,36 @@
 # Copyright 2017 The Hyve.
 class transmart_core::params(
-    $user               = hiera('transmart_core::user', 'transmart'),
-    $user_home          = hiera('transmart_core::user_home', undef),
-    $version            = hiera('transmart_core::version', '17.1-RC4'),
-    $nexus_url          = hiera('transmart_core::nexus_url', 'https://repo.thehyve.nl'),
-    $repository         = hiera('transmart_core::repository', 'releases'),
+    String[1] $user = 'transmart',
+    String[1] $version = '17.1-RC4',
+    String[1] $nexus_url = 'https://repo.thehyve.nl',
+    String[1] $repository = 'latest',
 
-    $tsloader_user      = hiera('transmart_core::tsloader_user', 'tsloader'),
-    $tsloader_user_home = hiera('transmart_core::tsloader_home', undef),
+    String[1] $tsloader_user = 'tsloader',
 
-    $db_user            = hiera('transmart_core::db_user', ''),
-    $db_password        = hiera('transmart_core::db_password', ''),
-    $db_type            = hiera('transmart_core::db_type', 'postgresql'), # or 'oracle'
-    $db_host            = hiera('transmart_core::db_host', 'localhost'),
-    $db_port_spec       = hiera('transmart_core::db_port', ''),
-    $db_name_spec       = hiera('transmart_core::db_name', undef),
+    String $db_user = 'transmart_test',
+    #String $db_user,
+    String $db_password = 'thehyve',
+    String[1] $db_type = 'postgresql_test',
+    String[1] $db_host = 'localhost', 
+    String[1] $db_name_spec = 'postgres',
+    String[1] $db_port_spec = '5432',
 
-    $biomart_user_password = hiera('transmart_core::biomart_user_password', 'biomart_user'),
-    $tm_cz_user_password = hiera('transmart_core::tm_cz_user_password', 'tm_cz'),
+    String[1] $biomart_user_password = 'biomart_user',
+    String[1] $tm_cz_user_password = 'tm_cz',
 
-    $memory             = hiera('transmart_core::memory', '2g'),
-    $app_port           = hiera('transmart_core::app_port', '8080'),
+    String[2] $memory = '2g',
+    Integer $app_port = '8080',
 
-    $transmart_url      = hiera('transmart_core::transmart_url', undef),
+    Optional[String[1]] $transmart_url = undef,
+
+    Boolean $saml_enabled = false,
+   
+    Optional[String[1]] $user_home          =  undef,
     $jobs_directory     = '/var/tmp/jobs',
-
-    $saml_enabled       = hiera('transmart_core::saml_enabled', false),
-    $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
-    $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
+ 
+    String[1] $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
+    Optional[String[1]] $tsloader_user_home = undef,
+    String[1] $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
 ) {
     # Set Nexus location
     $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
