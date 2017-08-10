@@ -24,8 +24,9 @@ class transmart_core::rserve inherits transmart_core::params {
         content => template('transmart_core/service/transmart-rserve.service.erb'),
     }
     ~> service { 'transmart-rserve':
-        ensure => running,
-        enable => true,
+        ensure   => running,
+        provider => 'systemd',
+        enable   => true,
     }
 
     case $::osfamily {
