@@ -90,7 +90,7 @@ class transmart_core inherits transmart_core::params {
     }
 
     class { '::java':
-        package => 'java-1.8.0-openjdk',
+        package => 'openjdk-8-jre',
     }
 
     require ::transmart_core::thehyve_repositories
