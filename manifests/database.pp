@@ -8,7 +8,7 @@ class transmart_core::database inherits transmart_core::params {
     }
 
     $tablespace_prefix = "/var/lib/postgresql/${::transmart_core::params::postgresql_params[version]}/main/tablespaces"
-    
+
     class { '::postgresql::globals':
         manage_package_repo => $::transmart_core::params::postgresql_params[manage_package_repo],
         version             => $::transmart_core::params::postgresql_params[version],

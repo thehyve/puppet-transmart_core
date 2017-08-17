@@ -17,16 +17,16 @@ class transmart_core::thehyve_repositories {
                 release     => $release,
                 repos       => 'main',
                 key         => {
-			'id' =>  '79cbff36340878cfb6a09bbecf5b7bd93375da21',
-                	'server'  => 'keyserver.ubuntu.com',
+                    'id'     => '79cbff36340878cfb6a09bbecf5b7bd93375da21',
+                    'server' => 'keyserver.ubuntu.com',
                 },
-		include => {
-			'src' => false,
-		}
+                include => {
+                    'src' => false,
+                }
             }
         }
 
-        Class['apt::update'] -> Package <| provider != 'pip' and
+    Class['apt::update'] -> Package <| provider != 'pip' and
                                             provider != 'pip3' and
                                             provider != 'dpkg' and
                                             provider != 'gem' and

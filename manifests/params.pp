@@ -11,7 +11,7 @@ class transmart_core::params(
     #String $db_user,
     String $db_password = 'thehyve',
     String[1] $db_type = 'postgresql_test',
-    String[1] $db_host = 'localhost', 
+    String[1] $db_host = 'localhost',
     String[1] $db_name_spec = 'postgres',
     String[1] $db_port_spec = '5432',
 
@@ -24,10 +24,10 @@ class transmart_core::params(
     Optional[String[1]] $transmart_url = undef,
 
     Boolean $saml_enabled = false,
-   
+
     Optional[String[1]] $user_home          =  undef,
     $jobs_directory     = '/var/tmp/jobs',
- 
+
     String[1] $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
     Optional[String[1]] $tsloader_user_home = undef,
     String[1] $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
