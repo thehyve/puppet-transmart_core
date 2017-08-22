@@ -12,6 +12,10 @@ class transmart_core::data inherits transmart_core::params {
         group   => $tsloader_user,
         require => User[$tsloader_user],
     }
+    Archive::Nexus {
+        owner   => $tsloader_user,
+        group   => $tsloader_user,
+    }
 
     $db_user = $::transmart_core::params::db_user
     $db_password = $::transmart_core::params::db_password

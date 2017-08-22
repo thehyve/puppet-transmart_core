@@ -15,6 +15,11 @@ class transmart_core::backend inherits transmart_core::params {
     $logs_dir = "${home}/logs"
     $jobs_dir = $::transmart_core::params::jobs_directory
 
+    Archive::Nexus {
+        owner   => $user,
+        group   => $user,
+    }
+
     # Download the application war
     archive::nexus { $application_war_file:
         user       => $user,
