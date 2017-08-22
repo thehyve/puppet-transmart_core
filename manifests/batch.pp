@@ -14,6 +14,10 @@ class transmart_core::batch inherits transmart_core::params {
         group   => $tsloader_user,
         require => User[$tsloader_user],
     }
+    Archive::Nexus {
+        owner   => $tsloader_user,
+        group   => $tsloader_user,
+    }
 
     file { $tsbatch_directory:
         ensure => directory,
