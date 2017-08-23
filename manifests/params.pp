@@ -13,7 +13,7 @@ class transmart_core::params(
     String[1] $db_type = 'postgresql',
     String[1] $db_host = 'localhost',
     String[1] $db_name_spec = 'postgres',
-    String[1] $db_port_spec = '5432',
+    Integer $db_port_spec = 5432,
 
     String[1] $biomart_user_password = 'biomart_user',
     String[1] $tm_cz_user_password = 'tm_cz',
