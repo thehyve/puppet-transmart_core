@@ -46,8 +46,9 @@ The module depends on the `archive` and `java` puppet modules.
 
 The most convenient way is to run `puppet module install` as `root`:
 ```bash
-sudo puppet module install puppet-archive
-sudo puppet module install puppetlabs-java
+puppet module install puppet-archive
+puppet module install puppetlabs-java
+puppet module install puppetlabs-apt 
 ```
 Alternatively, the modules and their dependencies can be cloned from `github.com`
 and copied into `/etc/puppet/modules`:
@@ -61,16 +62,20 @@ pushd stdlib; git checkout 4.17.0; popd
 cp -r archive java stdlib /etc/puppet/modules/
 ```
 
-If you want to let the module install PostgreSQL as well, install the `postgresql` module:
+If you want to let the module install PostgreSQL as well, install the `postgresql` module as `root`:
 ```bash
-sudo puppet module install puppetlabs-postgresql
+puppet module install puppetlabs-postgresql
 ```
 
 ### Install the `transmart_core` module
-Copy the `transmart_core` module repository to the `/etc/puppet/modules` directory:
+Copy the `transmart_core` module repository to the `/etc/puppetlabs/code/environments/<environment>/modules/` directory:
 ```bash
-cd /etc/puppet/modules
+cd /etc/puppetlabs/code/environments/<environment>/modules/
 git clone https://github.com/thehyve/puppet-transmart_core.git transmart_core
+```
+You can also clone only one branch:
+```bash
+git clone -b <branch_name> --single-branch https://github.com/thehyve/puppet-transmart_core.git transmart_core
 ```
 
 ## Configuration
