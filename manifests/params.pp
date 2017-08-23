@@ -10,7 +10,7 @@ class transmart_core::params(
     String $db_user = 'transmart_test',
     #String $db_user,
     String $db_password = 'thehyve',
-    String[1] $db_type = 'postgresql_test',
+    String[1] $db_type = 'postgresql',
     String[1] $db_host = 'localhost',
     String[1] $db_name_spec = 'postgres',
     String[1] $db_port_spec = '5432',
@@ -19,7 +19,7 @@ class transmart_core::params(
     String[1] $tm_cz_user_password = 'tm_cz',
 
     String[2] $memory = '2g',
-    Integer $app_port = '8080',
+    Integer $app_port = 8080,
 
     Optional[String[1]] $transmart_url = undef,
 
