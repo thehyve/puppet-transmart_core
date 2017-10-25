@@ -247,14 +247,14 @@ Install rake using the system-wide `ruby`:
 ```bash
 yum install ruby-devel
 gem install bundler
-export PUPPET_VERSION=3.8.7
+export PUPPET_VERSION=4.1
 bundle
 ```
 or using `rvm`:
 ```bash
 rvm install 2.1
 gem install bundler
-export PUPPET_VERSION=3.8.7
+export PUPPET_VERSION=4.1
 bundle
 ```
 Run the test suite:
