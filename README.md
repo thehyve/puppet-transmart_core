@@ -234,7 +234,7 @@ journalctl -u transmart-server - build log
 
 
 ## Test
-The module has been tested on Ubuntu 16.04 and CentOS 7 with Puppet version 3.8.7.
+The module has been tested on Ubuntu 16.04 with Puppet version 4.1.
 There are some automated tests, run using [rake](https://github.com/ruby/rake).
 
 A version of `ruby` before `2.3` is required. [rvm](https://rvm.io/) can be used to install a specific version of `ruby`.
