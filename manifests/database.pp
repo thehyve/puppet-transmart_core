@@ -3,12 +3,16 @@ class transmart_core::database inherits transmart_core::params {
     include ::transmart_core
     include ::transmart_core::config
 
-    if $::transmart_core::params::db_type != 'postgresql' {
-        fail("Class ::transmart_core::database not available for db_type '${::transmart_core::params::db_type}'")
+    $db_type = $::transmart_core::params::db_type
+    $default_postgres_version = $::transmart_core::params::default_postgres_version
+
+    if $db_type != 'postgresql' {
+        fail("Class ::transmart_core::database not available for db_type '${db_type}'")
     }
 
     class { '::postgresql::globals':
         manage_package_repo => true,
+        version             => hiera('postgresql::version', $default_postgres_version),
     }
     -> class { '::postgresql::server':
     }
