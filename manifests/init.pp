@@ -89,8 +89,20 @@ class transmart_core inherits transmart_core::params {
         owner  => $tsloader_user,
     }
 
+    case $::osfamily {
+        'redhat': {
+            $default_java = 'java-1.8.0-openjdk'
+        }
+        'debian': {
+            $default_java = 'openjdk-8-jdk'
+        }
+        default: {
+            $default_java = 'openjdk-8-jdk'
+        }
+    }
+
     class { '::java':
-        package => 'java-1.8.0-openjdk',
+        package => hiera('java::package', $default_java),
     }
 
     require ::transmart_core::thehyve_repositories

@@ -7,11 +7,8 @@ class transmart_core::database inherits transmart_core::params {
         fail("Class ::transmart_core::database not available for db_type '${::transmart_core::params::db_type}'")
     }
 
-    $tablespace_prefix = "/var/lib/pgsql/${::transmart_core::params::postgresql_params[version]}/data/tablespaces"
-
     class { '::postgresql::globals':
-        manage_package_repo => $::transmart_core::params::postgresql_params[manage_package_repo],
-        version             => $::transmart_core::params::postgresql_params[version],
+        manage_package_repo => true,
     }
     -> class { '::postgresql::server':
     }
@@ -21,11 +18,11 @@ class transmart_core::database inherits transmart_core::params {
         superuser     => true,
     }
 
-    # Create TranSMART tablespace directories
-    file { [$tablespace_prefix, "${tablespace_prefix}/transmart", "${tablespace_prefix}/indx"]:
-        ensure  => directory,
-        owner   => 'postgres',
-        mode    => '0755',
+    # Create TranSMART tablespaces
+    postgresql::server::tablespace { 'transmart':
+        require => Class['::postgresql::server'],
+    }
+    postgresql::server::tablespace { 'indx':
         require => Class['::postgresql::server'],
     }
 

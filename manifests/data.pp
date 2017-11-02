@@ -1,6 +1,9 @@
 # Copyright 2017 The Hyve.
 class transmart_core::data inherits transmart_core::params {
     include ::transmart_core
+    if ($::transmart_core::params::db_type == 'postgresql') {
+        include ::postgresql::params
+    }
 
     $tsloader_user = $::transmart_core::params::tsloader_user
     $tsloader_home = $::transmart_core::params::tsloader_home

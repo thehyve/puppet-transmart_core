@@ -28,8 +28,20 @@ class transmart_core::rserve inherits transmart_core::params {
         enable => true,
     }
 
+    case $::osfamily {
+        'redhat': {
+            $libpng_pkg = 'libpng12'
+        }
+        'debian': {
+            $libpng_pkg = 'libpng12-0'
+        }
+        default: {
+            $libpng_pkg = 'libpng12'
+        }
+    }
+
     # Package required for the R scripts
-    package { 'libpng12': }
+    package { $libpng_pkg: }
 
 }
 

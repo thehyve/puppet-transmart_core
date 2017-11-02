@@ -29,17 +29,9 @@ class transmart_core::params(
     $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
     $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
 ) {
-    # Set Nexus location
-    $nexus_repository = "${nexus_url}/content/repositories/${repository}/"
-
     # Database settings
     case $db_type {
         'postgresql': {
-            $postgresql_params = {
-                version             => '9.4',
-                manage_package_repo => true,
-            }
-            $tablespaces_dir = "/var/lib/pgsql/${postgresql_params[version]}/data/tablespaces"
             if $db_port_spec {
               $db_port = $db_port_spec
             } else {

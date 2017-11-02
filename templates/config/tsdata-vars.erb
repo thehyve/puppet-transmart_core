@@ -8,7 +8,7 @@ PGDATABASE=<%= scope.lookupvar('::transmart_core::params::db_name') %>
 PGUSER=<%= scope.lookupvar('::transmart_core::params::db_user') %>
 PGPASSWORD='<%= scope.lookupvar('::transmart_core::params::db_password') -%>'
 
-TABLESPACES=<%= scope.lookupvar('::transmart_core::params::tablespaces_dir') %>/
+TABLESPACES=<%= scope.lookupvar('::postgresql::params::datadir') %>/tablespaces/
 PGSQL_BIN="/usr/bin/"
 
 export PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD TABLESPACES PGSQL_BIN
