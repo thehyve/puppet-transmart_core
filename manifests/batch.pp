@@ -6,8 +6,10 @@ class transmart_core::batch inherits transmart_core::params {
     $tsloader_home = $::transmart_core::params::tsloader_home
     $tsbatch_directory = "${tsloader_home}/transmart-batch"
     $version = $::transmart_core::params::version
-    $tsbatch_jar_file = "${tsbatch_directory}/transmart-batch-${version}.jar"
-    $properties_file = "${tsbatch_directory}/batchdb.properties"
+    $tsbatch_jar_filename = "transmart-batch-${version}.jar"
+    $tsbatch_jar_file = "${tsbatch_directory}/${tsbatch_jar_filename}"
+    $properties_filename = 'batchdb.properties'
+    $properties_file = "${tsbatch_directory}/${properties_filename}"
 
     File {
         owner   => $tsloader_user,
