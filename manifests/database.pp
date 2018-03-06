@@ -6,6 +6,7 @@ class transmart_core::database inherits transmart_core::params {
     $db_type = $::transmart_core::params::db_type
     $db_user = $::transmart_core::params::db_user
     $db_password = $::transmart_core::params::db_password
+    $tsuser = $::transmart_core::params::user
 
     if $db_type != 'postgresql' {
         fail("Class ::transmart_core::database not available for db_type '${db_type}'")
@@ -25,12 +26,24 @@ class transmart_core::database inherits transmart_core::params {
         superuser     => true,
     }
 
+    $tablespaces_root = "${::postgresql::params::datadir}/tablespaces/"
+
+    File {
+        owner   => $::postgresql::params::user,
+        group   => $::postgresql::params::user,
+    }
+    file { $tablespaces_root:
+        ensure  => directory,
+    }
+
     # Create TranSMART tablespaces
     postgresql::server::tablespace { 'transmart':
-        require => Class['::postgresql::server'],
+        location => "${tablespaces_root}transmart",
+        require  => [Class['::postgresql::server'], File[$tablespaces_root]],
     }
     postgresql::server::tablespace { 'indx':
-        require => Class['::postgresql::server'],
+        location => "${tablespaces_root}indx",
+        require  => [Class['::postgresql::server'], File[$tablespaces_root]],
     }
 
 }
