@@ -29,6 +29,8 @@ class transmart_core::params(
     $saml_enabled       = hiera('transmart_core::saml_enabled', false),
     $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
     $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
+
+    $custom_config      = hiera('transmart_core::custom_config', ''),
 ) {
     # Database settings
     case $db_type {

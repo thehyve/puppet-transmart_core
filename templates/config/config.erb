@@ -461,11 +461,18 @@ edu.harvard.transmart.sampleBreakdownMap = [
     "aliquot_id":"Aliquots in Cohort"
 ]
 
+/* }}} */
+
+
 com { recomdata { solr {
     maxNewsStories = 10
     maxRows = 10000
 }}}
 
 
-org.transmart.configFine = true
+/* {{{ Custom configuration */
+<%= scope.lookupvar('::transmart_core::params::custom_config') %>
+/* }}} */
 
+
+org.transmart.configFine = true
