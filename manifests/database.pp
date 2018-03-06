@@ -34,6 +34,7 @@ class transmart_core::database inherits transmart_core::params {
     }
     file { $tablespaces_root:
         ensure  => directory,
+        require => File[$::postgresql::params::datadir],
     }
 
     # Create TranSMART tablespaces
