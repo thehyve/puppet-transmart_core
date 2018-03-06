@@ -33,10 +33,10 @@ class transmart_core::rserve inherits transmart_core::params {
             $libpng_pkg = 'libpng12'
         }
         'debian': {
-            $libpng_pkg = 'libpng12-0'
+            $libpng_pkg = 'libpng-dev'
         }
         default: {
-            $libpng_pkg = 'libpng12'
+            $libpng_pkg = 'libpng-dev'
         }
     }
 
