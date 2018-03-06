@@ -13,7 +13,7 @@ class transmart_core::params(
     $db_password        = hiera('transmart_core::db_password', ''),
     $db_type            = hiera('transmart_core::db_type', 'postgresql'), # or 'oracle'
     $db_host            = hiera('transmart_core::db_host', 'localhost'),
-    $db_port_spec       = hiera('transmart_core::db_port', ''),
+    $db_port_spec       = hiera('transmart_core::db_port', undef),
     $db_name_spec       = hiera('transmart_core::db_name', undef),
 
     $biomart_user_password = hiera('transmart_core::biomart_user_password', 'biomart_user'),
