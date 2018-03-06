@@ -21,6 +21,7 @@ class transmart_core::params(
 
     $memory             = hiera('transmart_core::memory', '2g'),
     $app_port           = hiera('transmart_core::app_port', '8080'),
+    $disable_server     = hiera('transmart_core::disable_server', false),
 
     $transmart_url      = hiera('transmart_core::transmart_url', undef),
     $jobs_directory     = '/var/tmp/jobs',

@@ -15,6 +15,12 @@ class transmart_core::backend inherits transmart_core::params {
     $logs_dir = "${home}/logs"
     $jobs_dir = $::transmart_core::params::jobs_directory
 
+    if $::transmart_core::params::disable_server {
+        $server_status = stopped
+    } else {
+        $server_status = running
+    }
+
     Archive::Nexus {
         owner   => $user,
         group   => $user,
@@ -59,7 +65,7 @@ class transmart_core::backend inherits transmart_core::params {
     }
     # Start the application service
     -> service { 'transmart-server':
-        ensure   => running,
+        ensure   => $server_status,
         provider => 'systemd',
         require  => [ File[$logs_dir], File[$jobs_dir], Archive::Nexus[$application_war_file] ],
     }

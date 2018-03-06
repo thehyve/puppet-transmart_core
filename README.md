@@ -300,6 +300,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::memory` | `2g` | The memory limit for the JVM. |
 | `transmart_core::app_port` | `8080` | The port the `transmart-server` application runs on. |
 | `transmart_core::transmart_url` | | The external address of the application. |
+| `transmart_core::disable_server` | `false` | (Temporarily) disable `transmart-server`. |
 
 
 ## License
