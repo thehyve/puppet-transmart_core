@@ -3,22 +3,30 @@ class transmart_core::thehyve_repositories {
     if $::osfamily == 'Debian' {
         require ::apt
 
-        if $::lsbdistcodename == 'trusty' {
-            $release = 'trusty'
-        } elsif $::lsbdistcodename == 'xenial' {
-            $release = 'xenial'
-        } else {
-            $release = undef
+        case $::lsbdistcodename {
+            'trusty': {
+                $release = 'trusty'
+            }
+            'xenial', 'artful': {
+                $release = 'xenial'
+            }
+            default: {
+                $release = undef
+            }
         }
 
         if $release != '' {
             apt::source { 'thehyve_internal':
-                location    => 'http://apt.thehyve.net/internal/',
-                release     => $release,
-                repos       => 'main',
-                key         => '79cbff36340878cfb6a09bbecf5b7bd93375da21',
-                key_server  => 'keyserver.ubuntu.com',
-                include_src => false,
+                location => 'http://apt.thehyve.net/internal/',
+                release  => $release,
+                repos    => 'main',
+                key      => {
+                    'id'     => '79cbff36340878cfb6a09bbecf5b7bd93375da21',
+                    'server' => 'keyserver.ubuntu.com',
+                },
+                include  => {
+                    'src' => false,
+                },
             }
         }
 
@@ -26,6 +34,7 @@ class transmart_core::thehyve_repositories {
                                             provider != 'pip3' and
                                             provider != 'dpkg' and
                                             provider != 'gem' and
+                                            title != 'dirmngr' and
                                             title != 'apt-transport-https' |>
     } elsif $::osfamily == 'RedHat' {
         yumrepo { 'thehyve_internal':

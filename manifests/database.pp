@@ -4,21 +4,24 @@ class transmart_core::database inherits transmart_core::params {
     include ::transmart_core::config
 
     $db_type = $::transmart_core::params::db_type
-    $default_postgres_version = $::transmart_core::params::default_postgres_version
+    $db_user = $::transmart_core::params::db_user
+    $db_password = $::transmart_core::params::db_password
 
     if $db_type != 'postgresql' {
         fail("Class ::transmart_core::database not available for db_type '${db_type}'")
     }
-
-    class { '::postgresql::globals':
-        manage_package_repo => true,
-        version             => hiera('postgresql::version', $default_postgres_version),
+    if ($db_user == '') {
+        fail('No database user specified. Please configure transmart_core::db_user')
     }
-    -> class { '::postgresql::server':
+    if ($db_password == '') {
+        fail('No database password specified. Please configure transmart_core::db_password')
+    }
+
+    class { '::postgresql::server':
     }
     # Create database superuser
-    -> postgresql::server::role { $::transmart_core::params::db_user:
-        password_hash => $::transmart_core::params::db_password,
+    -> postgresql::server::role { $db_user:
+        password_hash => $db_password,
         superuser     => true,
     }
 

@@ -32,14 +32,6 @@ class transmart_core::params(
     # Database settings
     case $db_type {
         'postgresql': {
-            case $::osfamily {
-                'redhat': {
-                    $postgres_default_version = '9.4'
-                }
-                default: {
-                    $postgres_default_version = '9.5'
-                }
-            }
             if $db_port_spec {
               $db_port = $db_port_spec
             } else {
