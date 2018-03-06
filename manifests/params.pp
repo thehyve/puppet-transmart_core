@@ -2,7 +2,7 @@
 class transmart_core::params(
     $user               = hiera('transmart_core::user', 'transmart'),
     $user_home          = hiera('transmart_core::user_home', undef),
-    $version            = hiera('transmart_core::version', '17.1-RC4'),
+    $version            = hiera('transmart_core::version', '17.1-RC7'),
     $nexus_url          = hiera('transmart_core::nexus_url', 'https://repo.thehyve.nl'),
     $repository         = hiera('transmart_core::repository', 'releases'),
 
