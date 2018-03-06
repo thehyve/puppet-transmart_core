@@ -268,8 +268,10 @@ Overview of the classes defined in this module.
 | `::transmart_core::backend` | Installs the `transmart-server` service. |
 | `::transmart_core::solr` | Installs the `transmart-solr` service. |
 | `::transmart_core::rserve` | Installs the `transmart-rserve` service. |
+| `::transmart_core::essentials` | Installs all of the above. |
 | `::transmart_core::data` | Installs `transmart-data` in the `tsloader` home directory. |
 | `::transmart_core::batch` | Installs `transmart-batch` in the `tsloader` home directory. |
+| `::transmart_core::thehyve_repositories` | Configures The Hyve repositories for `apt` or `yum`. |
 | `::transmart_core::complete` | Installs all of the above. |
 | `::transmart_core::database` | Installs `postgresql` with the database admin credentials and required tablespace directories. |
 

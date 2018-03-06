@@ -105,7 +105,5 @@ class transmart_core inherits transmart_core::params {
         package => hiera('java::package', $default_java),
     }
 
-    require ::transmart_core::thehyve_repositories
-
 }
 
