@@ -26,6 +26,8 @@ class transmart_core::params(
     $transmart_url      = hiera('transmart_core::transmart_url', undef),
     $jobs_directory     = '/var/tmp/jobs',
 
+    $cors_enabled       = hiera('transmart_core::cors_enabled', true),
+
     $saml_enabled       = hiera('transmart_core::saml_enabled', false),
     $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
     $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',

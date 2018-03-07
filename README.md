@@ -301,6 +301,8 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::app_port` | `8080` | The port the `transmart-server` application runs on. |
 | `transmart_core::transmart_url` | | The external address of the application. |
 | `transmart_core::disable_server` | `false` | (Temporarily) disable `transmart-server`. |
+| `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
+| `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
 
 
 ## License

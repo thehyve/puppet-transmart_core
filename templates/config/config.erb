@@ -249,15 +249,17 @@ buildInfo { properties {
 
 
 /* {{{ Spring Security configuration */
+<% if scope.lookupvar('::transmart_core::params::cors_enabled').to_s == 'true' -%>
+// Enable cross-origin resource sharing, allowing the front-end application
+// to be served on a different domain than the back-end.
+grails.cors.enabled = true
+
+<% end -%>
 grails { plugin { springsecurity {
 
     if (org.transmartproject.app.oauthEnabled) {
 
-        def glowingBearRedirectUris = [
-                org.transmartproject.app.transmartURL - ~/transmart\/?$/ + 'connections',
-        ]
-        // for dev, node reverse proxy runs on 8001
-        glowingBearRedirectUris << 'http://localhost:8001/connections'
+        def glowingBearRedirectUris = []
 
         oauthProvider {
             authorization.requireRegisteredRedirectUri = true
