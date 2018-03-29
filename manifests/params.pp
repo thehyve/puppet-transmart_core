@@ -1,38 +1,38 @@
 # Copyright 2017 The Hyve.
 class transmart_core::params(
-    $user               = hiera('transmart_core::user', 'transmart'),
-    $user_home          = hiera('transmart_core::user_home', undef),
-    $version            = hiera('transmart_core::version', '17.1-RC8'),
-    $nexus_url          = hiera('transmart_core::nexus_url', 'https://repo.thehyve.nl'),
-    $repository         = hiera('transmart_core::repository', 'releases'),
+    String $user                         = lookup('transmart_core::user', String, first, 'transmart'),
+    Optional[String] $user_home          = lookup('transmart_core::user_home', Optional[String], first, undef),
+    String $version                      = lookup('transmart_core::version', String, first, '17.1-RC8'),
+    String $nexus_url                    = lookup('transmart_core::nexus_url', String, first, 'https://repo.thehyve.nl'),
+    String $repository                   = lookup('transmart_core::repository', String, first, 'releases'),
 
-    $tsloader_user      = hiera('transmart_core::tsloader_user', 'tsloader'),
-    $tsloader_user_home = hiera('transmart_core::tsloader_home', undef),
+    String $tsloader_user                = lookup('transmart_core::tsloader_user', String, first, 'tsloader'),
+    Optional[String] $tsloader_user_home = lookup('transmart_core::tsloader_home', Optional[String], first, undef),
 
-    $db_user            = hiera('transmart_core::db_user', ''),
-    $db_password        = hiera('transmart_core::db_password', ''),
-    $db_type            = hiera('transmart_core::db_type', 'postgresql'), # or 'oracle'
-    $db_host            = hiera('transmart_core::db_host', 'localhost'),
-    $db_port_spec       = hiera('transmart_core::db_port', undef),
-    $db_name_spec       = hiera('transmart_core::db_name', undef),
+    String $db_user                      = lookup('transmart_core::db_user', String, first, ''),
+    String $db_password                  = lookup('transmart_core::db_password', String, first, ''),
+    Enum['postgresql','oracle'] $db_type = lookup('transmart_core::db_type', Enum['postgresql','oracle'], first, 'postgresql'),
+    String $db_host                      = lookup('transmart_core::db_host', String, first, 'localhost'),
+    Optional[String] $db_port_spec       = lookup('transmart_core::db_port', Optional[String], first, undef),
+    Optional[String] $db_name_spec       = lookup('transmart_core::db_name', Optional[String], first, undef),
 
-    $biomart_user_password = hiera('transmart_core::biomart_user_password', 'biomart_user'),
-    $tm_cz_user_password = hiera('transmart_core::tm_cz_user_password', 'tm_cz'),
+    String $biomart_user_password        = lookup('transmart_core::biomart_user_password', String, first, 'biomart_user'),
+    String $tm_cz_user_password          = lookup('transmart_core::tm_cz_user_password', String, first, 'tm_cz'),
 
-    $memory             = hiera('transmart_core::memory', '2g'),
-    $app_port           = hiera('transmart_core::app_port', '8080'),
-    $disable_server     = hiera('transmart_core::disable_server', false),
+    String $memory                       = lookup('transmart_core::memory', String, first, '2g'),
+    Variant[String,Integer[1,65535]] $app_port  = lookup ('transmart_core::app_port', Variant[String,Integer[1,65535]], first, '8080'),
+    Boolean $disable_server              = lookup('transmart_core::disable_server', Boolean, first, false),
 
-    $transmart_url      = hiera('transmart_core::transmart_url', undef),
-    $jobs_directory     = '/var/tmp/jobs',
+    Optional[String] $transmart_url      = lookup('transmart_core::transmart_url', Optional[String], first, undef),
+    String $jobs_directory               = '/var/tmp/jobs',
 
-    $cors_enabled       = hiera('transmart_core::cors_enabled', true),
+    Boolean $cors_enabled                = lookup('transmart_core::cors_enabled', Boolean, first, true),
 
-    $saml_enabled       = hiera('transmart_core::saml_enabled', false),
-    $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
-    $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
+    Boolean $saml_enabled                = lookup('transmart_core::saml_enabled', Boolean, first, false),
+    Optional[String] $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
+    Optional[String] $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
 
-    $custom_config      = hiera('transmart_core::custom_config', ''),
+    String $custom_config      = lookup('transmart_core::custom_config', String, first, ''),
 ) {
     # Database settings
     case $db_type {

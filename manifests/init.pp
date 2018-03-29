@@ -102,7 +102,7 @@ class transmart_core inherits transmart_core::params {
     }
 
     class { '::java':
-        package => hiera('java::package', $default_java),
+        package => lookup('java::package', String, first, $default_java),
     }
 
 }
