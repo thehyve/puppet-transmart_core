@@ -283,7 +283,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 | Hiera key | Default value | Description |
 |-----------|---------------|-------------|
-| `transmart_core::version` | `17.1-RC8` | The version of the TranSMART artefacts to install. |
+| `transmart_core::version` | `17.1-RC9` | The version of the TranSMART artefacts to install. |
 | `transmart_core::nexus_url` | `https://repo.thehyve.nl` | The Nexus/Maven repository server. |
 | `transmart_core::repository` | `releases` | The repository to use. [`snapshots`, `releases`] |
 | `transmart_core::user` | `transmart` | System user that runs the application. |

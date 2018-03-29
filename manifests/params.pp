@@ -2,7 +2,7 @@
 class transmart_core::params(
     String $user                         = lookup('transmart_core::user', String, first, 'transmart'),
     Optional[String] $user_home          = lookup('transmart_core::user_home', Optional[String], first, undef),
-    String $version                      = lookup('transmart_core::version', String, first, '17.1-RC8'),
+    String $version                      = lookup('transmart_core::version', String, first, '17.1-RC9'),
     String $nexus_url                    = lookup('transmart_core::nexus_url', String, first, 'https://repo.thehyve.nl'),
     String $repository                   = lookup('transmart_core::repository', String, first, 'releases'),
 
