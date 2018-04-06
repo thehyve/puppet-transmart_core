@@ -13,7 +13,7 @@ class transmart_core::params(
     String $db_password                  = lookup('transmart_core::db_password', String, first, ''),
     Enum['postgresql','oracle'] $db_type = lookup('transmart_core::db_type', Enum['postgresql','oracle'], first, 'postgresql'),
     String $db_host                      = lookup('transmart_core::db_host', String, first, 'localhost'),
-    Optional[String] $db_port_spec       = lookup('transmart_core::db_port', Optional[String], first, undef),
+    Optional[Integer] $db_port_spec       = lookup('transmart_core::db_port', Optional[Integer], first, undef),
     Optional[String] $db_name_spec       = lookup('transmart_core::db_name', Optional[String], first, undef),
 
     String $biomart_user_password        = lookup('transmart_core::biomart_user_password', String, first, 'biomart_user'),
