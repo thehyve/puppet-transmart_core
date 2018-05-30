@@ -7,7 +7,7 @@ class transmart_core::thehyve_repositories {
             'trusty': {
                 $release = 'trusty'
             }
-            'xenial', 'artful': {
+            'xenial', 'artful', 'bionic': {
                 $release = 'xenial'
             }
             default: {
