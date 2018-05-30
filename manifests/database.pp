@@ -26,7 +26,7 @@ class transmart_core::database inherits transmart_core::params {
         superuser     => true,
     }
 
-    $tablespaces_root = "${::postgresql::params::datadir}/tablespaces/"
+    $tablespaces_root = "${::postgresql::params::datadir}/../tablespaces/"
 
     File {
         owner   => $::postgresql::params::user,
