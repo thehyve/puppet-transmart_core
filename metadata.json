@@ -1,6 +1,6 @@
 {
   "name": "thehyve-transmart_core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "thehyve",
   "summary": "Puppet module for TranSMART",
   "license": "GPL-3.0",

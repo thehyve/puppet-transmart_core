@@ -13,7 +13,7 @@ class transmart_core::params(
     String $db_password                  = lookup('transmart_core::db_password', String, first, ''),
     Enum['postgresql','oracle'] $db_type = lookup('transmart_core::db_type', Enum['postgresql','oracle'], first, 'postgresql'),
     String $db_host                      = lookup('transmart_core::db_host', String, first, 'localhost'),
-    Optional[Integer] $db_port_spec       = lookup('transmart_core::db_port', Optional[Integer], first, undef),
+    Optional[Integer] $db_port_spec      = lookup('transmart_core::db_port', Optional[Integer], first, undef),
     Optional[String] $db_name_spec       = lookup('transmart_core::db_name', Optional[String], first, undef),
 
     String $biomart_user_password        = lookup('transmart_core::biomart_user_password', String, first, 'biomart_user'),
@@ -32,7 +32,9 @@ class transmart_core::params(
     Optional[String] $saml_idp_meta_f    = '/etc/transmart-idp-metadata.xml',
     Optional[String] $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
 
-    String $custom_config      = lookup('transmart_core::custom_config', String, first, ''),
+    Hash[String, Array[String]] $clients = lookup('transmart_core::clients', Hash, first, {'glowingbear-js' => []}),
+
+    String $custom_config                = lookup('transmart_core::custom_config', String, first, ''),
 ) {
     # Database settings
     case $db_type {

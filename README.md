@@ -122,6 +122,9 @@ transmart_core::db_name: transmart
 transmart_core::db_port: 1521
 transmart_core::memory: 4g
 transmart_core::transmart_url: https://test.example.com
+transmart_core::clients:
+  glowingbear-js:
+    - https://glowingbear.example.com
 ```
 
 ### Configuring a node in the manifest file
@@ -300,6 +303,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::transmart_url` | | The external address of the application. |
 | `transmart_core::disable_server` | `false` | (Temporarily) disable `transmart-server`. |
 | `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
+| `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`.
 | `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
 
 

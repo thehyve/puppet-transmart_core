@@ -258,9 +258,6 @@ grails.cors.enabled = true
 grails { plugin { springsecurity {
 
     if (org.transmartproject.app.oauthEnabled) {
-
-        def glowingBearRedirectUris = []
-
         oauthProvider {
             authorization.requireRegisteredRedirectUri = true
             authorization.requireScope = false
@@ -277,14 +274,20 @@ grails { plugin { springsecurity {
                                 (org.transmartproject.app.transmartURL - ~'\\/$') + '/v1/oauth/verify'
                         ],
                     ],
+                    <% scope['::transmart_core::params::clients'].each do |clientId, redirectUris| -%>
                     [
-                        clientId: 'glowingbear-js',
+                        clientId: '<%= clientId %>',
                         clientSecret: '',
                         authorities: ['ROLE_CLIENT'],
                         scopes: ['read', 'write'],
-                        authorizedGrantTypes: ['implicit', 'password'],
-                        redirectUris: glowingBearRedirectUris,
+                        authorizedGrantTypes: ['implicit', 'password', 'authorization_code', 'refresh_token'],
+                        redirectUris: [
+                        <% redirectUris.each do |redirectUri| -%>
+                            '<%= redirectUri %>',
+                        <% end %>
+                        ],
                     ],
+                    <% end %>
             ]
         }
     }
