@@ -1,6 +1,6 @@
 source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
-ruby '>= 2.4.0'
+ruby '>= 2.3.0'
 
 puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['>= 4.0']
 gem 'metadata-json-lint'
