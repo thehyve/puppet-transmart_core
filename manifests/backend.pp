@@ -6,7 +6,6 @@ class transmart_core::backend inherits transmart_core::params {
     $user = $::transmart_core::params::user
     $home = $::transmart_core::params::tsuser_home
     $version = $::transmart_core::params::version
-    $application_war_file = "${home}/transmart-server-${version}.war"
     $memory = $::transmart_core::params::memory
     $java_opts = "-server -Xms${memory} -Xmx${memory} -Djava.awt.headless=true -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true "
     $app_port = $::transmart_core::params::app_port
@@ -21,6 +20,25 @@ class transmart_core::backend inherits transmart_core::params {
         $server_status = running
     }
 
+    if $::transmart_core::params::server_type == 'api-server' {
+        # Check authentication settings
+        if $::transmart_core::params::oidc_server_url == undef {
+            fail('No OpenID Connect server configured. Please configure transmart_core::oidc_server_url')
+        }
+        if $::transmart_core::params::oidc_client_id == undef {
+            fail('No OpenID Connect client configured. Please configure transmart_core::oidc_client_id')
+        }
+
+        $package_name = 'transmart-api-server'
+        $config_location = "${::transmart_core::params::tsuser_home}/transmart-api-server.config.yml"
+        $config_opts = "-Dspring.config.location=${config_location}"
+    } else {
+        $package_name = 'transmart-server'
+        $config_opts = ''
+    }
+
+    $application_war_file = "${home}/${package_name}-${version}.war"
+
     Archive::Nexus {
         owner   => $user,
         group   => $user,
@@ -30,7 +48,7 @@ class transmart_core::backend inherits transmart_core::params {
     archive::nexus { $application_war_file:
         user       => $user,
         url        => $::transmart_core::params::nexus_url,
-        gav        => "org.transmartproject:transmart-server:${version}",
+        gav        => "org.transmartproject:${package_name}:${version}",
         repository => $::transmart_core::params::repository,
         packaging  => 'war',
         mode       => '0444',

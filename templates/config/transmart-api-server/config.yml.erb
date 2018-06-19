@@ -1,0 +1,49 @@
+---
+dataSource:
+<% case scope.lookupvar('::transmart_core::params::db_type') -%>
+<% when 'postgresql' -%>
+    driverClassName: org.postgresql.Driver
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+<% when 'oracle' -%>
+    driverClassName: oracle.jdbc.driver.OracleDriver
+    dialect: org.hibernate.dialect.Oracle10gDialect
+<% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
+<% end -%>
+    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>
+    username: biomart_user
+    password: <%= scope.lookupvar('::transmart_core::params::biomart_user_password') %>
+    dbCreate: none
+    pooled: true
+    jmxExport: true
+    logSql: false
+    formatql: false
+    properties:
+        jmxEnabled: true
+        initialSize: 5
+        maxActive: 50
+        minIdle: 5
+        maxIdle: 25
+        maxWait: 10000
+        maxAge: 600000
+        timeBetweenEvictionRunsMillis: 5000
+        minEvictableIdleTimeMillis: 60000
+<% case scope.lookupvar('::transmart_core::params::db_type') -%>
+<% when 'postgresql' -%>
+        validationQuery: select 1
+<% when 'oracle' -%>
+        validationQuery: select 1 from dual
+<% end -%>
+        validationQueryTimeout: 3
+        validationInterval: 15000
+        testOnBorrow: true
+        testWhileIdle: true
+        testOnReturn: false
+        jdbcInterceptors: ConnectionState
+        defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+security:
+    oauth2:
+        client:
+            clientId: <%= scope.lookupvar('::transmart_core::params::oidc_client_id') %>
+        resource:
+            userInfoUri: <%= scope.lookupvar('::transmart_core::params::oidc_server_url') %>/protocol/openid-connect/userinfo

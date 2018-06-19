@@ -50,7 +50,7 @@ sudo puppet module install puppet-archive
 sudo puppet module install puppetlabs-java
 ```
 Alternatively, the modules and their dependencies can be cloned from `github.com`
-and copied into `/etc/puppet/modules`:
+and copied into `/etc/puppetlabs/code/modules`:
 ```bash
 git clone https://github.com/voxpupuli/puppet-archive.git archive
 pushd archive; git checkout v0.5.1; popd
@@ -58,7 +58,7 @@ git clone https://github.com/puppetlabs/puppetlabs-java.git java
 pushd java; git checkout 1.6.0; popd
 git clone https://github.com/puppetlabs/puppetlabs-stdlib stdlib
 pushd stdlib; git checkout 4.17.0; popd
-cp -r archive java stdlib /etc/puppet/modules/
+cp -r archive java stdlib /etc/puppetlabs/code/modules/
 ```
 
 If you want to let the module install PostgreSQL as well, install the `postgresql` module:
@@ -67,9 +67,9 @@ sudo puppet module install puppetlabs-postgresql
 ```
 
 ### Install the `transmart_core` module
-Copy the `transmart_core` module repository to the `/etc/puppet/modules` directory:
+Copy the `transmart_core` module repository to the `/etc/puppetlabs/code/modules` directory:
 ```bash
-cd /etc/puppet/modules
+cd /etc/puppetlabs/code/modules
 git clone https://github.com/thehyve/puppet-transmart_core.git transmart_core
 ```
 
@@ -87,31 +87,39 @@ node 'test.example.com' {
 }
 ```
 This installs `transmart-server`, `solr`, `rserve`, `transmart-data`, and `transmart-batch`.
+An example for installing only the API server:
+```puppet
+node 'api.example.com' {
+    include ::transmart_core::api_essentials
+}
+```
+This installs `transmart-api-server`.
+
 The node manifest can also be in another file, e.g., `site.pp`.
 
 ### Configuring a node using Hiera
 
 It is preferred to configure the module parameters using Hiera.
 
-To activate the use of Hiera, configure `/etc/puppet/hiera.yaml`. Example:
+To activate the use of Hiera, configure `/etc/puppetlabs/code/hiera.yaml`. Example:
 ```yaml
 ---
 :backends:
   - yaml
 :yaml:
-  :datadir: '/etc/puppet/hieradata'
+  :datadir: '/etc/puppetlabs/code/hieradata'
 :hierarchy:
   - '%{::clientcert}'
   - 'default'
 ```
-Defaults can then be configured in `/etc/puppet/hieradata/default.yaml`, e.g.:
+Defaults can then be configured in `/etc/puppetlabs/code/hieradata/default.yaml`, e.g.:
 ```yaml
 ---
 transmart_core::db_type: postgresql
 ```
 
-Machine specific configuration should be in `/etc/puppet/hieradata/${hostname}.yaml`, e.g.,
-`/etc/puppet/hieradata/test.example.com.yaml`:
+Machine specific configuration should be in `/etc/puppetlabs/code/hieradata/${hostname}.yaml`, e.g.,
+`/etc/puppetlabs/code/hieradata/test.example.com.yaml`:
 ```yaml
 ---
 transmart_core::db_user: test as sysdba
@@ -127,6 +135,17 @@ transmart_core::clients:
     - https://glowingbear.example.com
 ```
 
+Or `/etc/puppetlabs/code/hieradata/api.example.com.yaml`:
+```yaml
+---
+transmart_core::db_user: db_admin
+transmart_core::db_password: my secret
+transmart_core::memory: 4g
+transmart_core::server_type: api-server
+transmart_core::oidc_client_id: transmart-api
+transmart_core::oidc_server_url: https://keycloak.example.com/auth/realms/transmart
+```
+
 ### Configuring a node in the manifest file
 
 Alternatively, the node specific configuration can also be done with class parameters in the node manifest.
@@ -139,7 +158,7 @@ node 'test.example.com' {
         db_user      => 'test as sysdba',
         db_password  => 'my secret',
         db_port_spec => 1521,
-        db_name_spec => 'transmart,
+        db_name_spec => 'transmart',
     }
 
     include ::transmart_core::complete
@@ -176,7 +195,7 @@ sudo puppet apply --modulepath=${modulepath} examples/complete.pp
 where `modulepath` is a list of directories where Puppet can find modules in, separated by the system path-separator character (on Ubuntu/CentOS it is `:`).
 Example:
 ```bash
-sudo puppet apply --modulepath=${HOME}/puppet/:/etc/puppet/modules examples/complete.pp
+sudo puppet apply --modulepath=${HOME}/puppet/:/etc/puppetlabs/code/modules examples/complete.pp
 ```
 
 ## Database installation and preparation
@@ -303,7 +322,10 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::transmart_url` | | The external address of the application. |
 | `transmart_core::disable_server` | `false` | (Temporarily) disable `transmart-server`. |
 | `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
-| `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`.
+| `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`. |
+| `transmart_core::server_type` | `app-server` | [`app-server`, `api-server`] |
+| `transmart_core::oidc_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
+| `transmart_core::oidc_server_url` |  | OpenID Connect identity server, e.g., `https://oidc.example.com/auth/realms/transmart`. |
 | `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
 
 
