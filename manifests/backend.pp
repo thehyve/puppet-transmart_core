@@ -22,11 +22,17 @@ class transmart_core::backend inherits transmart_core::params {
 
     if $::transmart_core::params::server_type == 'api-server' {
         # Check authentication settings
-        if $::transmart_core::params::oidc_server_url == undef {
-            fail('No OpenID Connect server configured. Please configure transmart_core::oidc_server_url')
+        if $::transmart_core::params::keycloak_realm == undef {
+            fail('No realm specified. Please configure transmart_core::keycloak_realm')
         }
-        if $::transmart_core::params::oidc_client_id == undef {
-            fail('No OpenID Connect client configured. Please configure transmart_core::oidc_client_id')
+        if $::transmart_core::params::keycloak_server_url == undef {
+            fail('No OpenID Connect server configured. Please configure transmart_core::keycloak_server_url')
+        }
+        if $::transmart_core::params::keycloak_client_id == undef {
+            fail('No OpenID Connect client configured. Please configure transmart_core::keycloak_client_id')
+        }
+        if $::transmart_core::params::keycloak_offline_token == undef {
+            fail('No offline token specified. Please configure transmart_core::keycloak_offline_token')
         }
 
         $package_name = 'transmart-api-server'

@@ -41,9 +41,15 @@ dataSource:
         jdbcInterceptors: ConnectionState
         defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
 
-security:
-    oauth2:
-        client:
-            clientId: <%= scope.lookupvar('::transmart_core::params::oidc_client_id') %>
-        resource:
-            userInfoUri: <%= scope.lookupvar('::transmart_core::params::oidc_server_url') %>/protocol/openid-connect/userinfo
+<% case scope.lookupvar('::transmart_core::params::server_type') -%>
+<% when 'api-server' -%>
+keycloak:
+    realm: <%= scope.lookupvar('::transmart_core::params::keycloak_realm') %>
+    bearer-only: true
+    auth-server-url: <%= scope.lookupvar('::transmart_core::params::keycloak_server_url') %>
+    resource: <%= scope.lookupvar('::transmart_core::params::keycloak_client_id') %>
+    use-resource-role-mappings: true
+
+keycloakOffline:
+    offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
+<% end -%>

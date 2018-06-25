@@ -14,7 +14,7 @@ describe 'transmart_core::backend' do
     context "with api-server server type without oidc configuration on #{os}" do
       let(:facts) { facts }
       let(:node) { 'api2.example.com' }
-      it { should compile.and_raise_error(/No OpenID Connect server configured/) }
+      it { should compile.and_raise_error(/No realm specified/) }
     end
     context "with api-server server type and valid oidc configuration on #{os}" do
       let(:facts) { facts }

@@ -38,8 +38,10 @@ class transmart_core::params(
     Enum['api-server', 'app-server'] $server_type
         = lookup('transmart_core::server_type', Enum['api-server', 'app-server'], first, 'app-server'),
 
-    Optional[String] $oidc_client_id     = lookup('transmart_core::oidc_client_id', Optional[String], first, undef),
-    Optional[String] $oidc_server_url    = lookup('transmart_core::oidc_server_url', Optional[String], first, undef),
+    Optional[String] $keycloak_realm         = lookup('transmart_core::keycloak_realm', Optional[String], first, undef),
+    Optional[String] $keycloak_server_url    = lookup('transmart_core::keycloak_server_url', Optional[String], first, undef),
+    Optional[String] $keycloak_client_id     = lookup('transmart_core::keycloak_client_id', Optional[String], first, undef),
+    Optional[String] $keycloak_offline_token = lookup('transmart_core::keycloak_offline_token', Optional[String], first, undef),
 
     String $custom_config                = lookup('transmart_core::custom_config', String, first, ''),
 ) {

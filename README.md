@@ -142,8 +142,10 @@ transmart_core::db_user: db_admin
 transmart_core::db_password: my secret
 transmart_core::memory: 4g
 transmart_core::server_type: api-server
-transmart_core::oidc_client_id: transmart-api
-transmart_core::oidc_server_url: https://keycloak.example.com/auth/realms/transmart
+transmart_core::keycloak_realm: transmart
+transmart_core::keycloak_server_url: https://keycloak.example.com/auth
+transmart_core::keycloak_client_id: transmart-api
+transmart_core::keycloak_offline_token: eyJhbGciO...Z40g3-Q
 ```
 
 ### Configuring a node in the manifest file
@@ -324,8 +326,10 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
 | `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`. |
 | `transmart_core::server_type` | `app-server` | [`app-server`, `api-server`] |
-| `transmart_core::oidc_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
-| `transmart_core::oidc_server_url` |  | OpenID Connect identity server, e.g., `https://oidc.example.com/auth/realms/transmart`. |
+| `transmart_core::keycloak_server_url` |  | Identity provider server url, e.g., `https://oidc.example.com/auth`. |
+| `transmart_core::keycloak_realm` |  | A realm is container with clients, users and permissions, e.g., `transmart`. |
+| `transmart_core::keycloak_offline_token` |  | An offline token to fetch a new access token. See `https://www.keycloak.org/docs/3.2/server_admin/topics/sessions/offline.html` |
+| `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
 | `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
 
 
