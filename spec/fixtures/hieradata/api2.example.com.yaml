@@ -1,0 +1,5 @@
+---
+transmart_core::db_user: test
+transmart_core::db_password: Passw0rd1!
+
+transmart_core::server_type: api-server

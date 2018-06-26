@@ -20,7 +20,8 @@ class transmart_core::params(
     String $tm_cz_user_password          = lookup('transmart_core::tm_cz_user_password', String, first, 'tm_cz'),
 
     String $memory                       = lookup('transmart_core::memory', String, first, '2g'),
-    Variant[String,Integer[1,65535]] $app_port  = lookup ('transmart_core::app_port', Variant[String,Integer[1,65535]], first, '8080'),
+    Variant[String,Integer[1,65535]] $app_port
+        = lookup('transmart_core::app_port', Variant[String,Integer[1,65535]], first, '8080'),
     Boolean $disable_server              = lookup('transmart_core::disable_server', Boolean, first, false),
 
     Optional[String] $transmart_url      = lookup('transmart_core::transmart_url', Optional[String], first, undef),
@@ -33,6 +34,14 @@ class transmart_core::params(
     Optional[String] $saml_keystore_f    = '/etc/transmart-sp-keystore.jks',
 
     Hash[String, Array[String]] $clients = lookup('transmart_core::clients', Hash, first, {'glowingbear-js' => []}),
+
+    Enum['api-server', 'app-server'] $server_type
+        = lookup('transmart_core::server_type', Enum['api-server', 'app-server'], first, 'app-server'),
+
+    Optional[String] $keycloak_realm         = lookup('transmart_core::keycloak_realm', Optional[String], first, undef),
+    Optional[String] $keycloak_server_url    = lookup('transmart_core::keycloak_server_url', Optional[String], first, undef),
+    Optional[String] $keycloak_client_id     = lookup('transmart_core::keycloak_client_id', Optional[String], first, undef),
+    Optional[String] $keycloak_offline_token = lookup('transmart_core::keycloak_offline_token', Optional[String], first, undef),
 
     String $custom_config                = lookup('transmart_core::custom_config', String, first, ''),
 ) {
