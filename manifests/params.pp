@@ -38,6 +38,11 @@ class transmart_core::params(
     Enum['api-server', 'app-server'] $server_type
         = lookup('transmart_core::server_type', Enum['api-server', 'app-server'], first, 'app-server'),
 
+    Boolean $notifications_enabled       = lookup('transmart_core::notifications_enabled', Boolean, first, false),
+    Integer $notifications_sets          = lookup('transmart_core::notifications_sets', Integer, first, 20),
+    Integer[0,23] $notifications_trigger_hour = lookup('transmart_core::notifications_trigger_hour', Integer[0,23], first, 0),
+    Integer[0,59] $notifications_trigger_minute = lookup('transmart_core::notifications_trigger_minute', Integer[0,59], first, 0),
+
     Optional[String] $keycloak_realm         = lookup('transmart_core::keycloak_realm', Optional[String], first, undef),
     Optional[String] $keycloak_server_url    = lookup('transmart_core::keycloak_server_url', Optional[String], first, undef),
     Optional[String] $keycloak_client_id     = lookup('transmart_core::keycloak_client_id', Optional[String], first, undef),
