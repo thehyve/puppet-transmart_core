@@ -53,3 +53,15 @@ keycloak:
 keycloakOffline:
     offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
 <% end -%>
+
+<% if scope.lookupvar('::transmart_core::params::notifications_enabled') -%>
+org.transmartproject.notifications:
+    # enable daily and weekly notification jobs
+    enabled: true
+    # max number of query sets returned in a subscription email
+    maxNumberOfSets: <%= scope.lookupvar('::transmart_core::params::notifications_sets').to_s %>
+    # daily cron job trigger time in format: hh-mm
+    # hh: Hour, range: 0-23;
+    # mm: Minute, range: 0-59;
+    dailyJobTriggerTime: <%= scope.lookupvar('::transmart_core::params::notifications_trigger_hour').to_s %>-<%= scope.lookupvar('::transmart_core::params::notifications_trigger_minute').to_s %>
+<% end -%>
