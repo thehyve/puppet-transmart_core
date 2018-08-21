@@ -82,6 +82,7 @@ class transmart_core inherits transmart_core::params {
         ensure     => present,
         home       => $tsloader_home,
         managehome => true,
+        shell      => '/bin/bash',
     }
     -> file { $tsloader_home:
         ensure => directory,
