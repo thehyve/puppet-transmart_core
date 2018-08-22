@@ -102,8 +102,10 @@ class transmart_core inherits transmart_core::params {
         }
     }
 
-    class { '::java':
-        package => lookup('java::package', String, first, $default_java),
+    if !defined('::java') {
+        class { '::java':
+            package => lookup('java::package', String, first, $default_java),
+        }
     }
 
 }
