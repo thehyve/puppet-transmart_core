@@ -326,11 +326,16 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
 | `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`. |
 | `transmart_core::server_type` | `app-server` | [`app-server`, `api-server`] |
+| `transmart_core::notifications_enabled` | `false` | Enable notifications for query subscriptions. |
+| `transmart_core::notifications_sets` | `20` | Number of sets. |
+| `transmart_core::notifications_trigger_hour` | `0` | Hour for daily notification trigger. |
+| `transmart_core::notifications_trigger_minute` | `0` | Minute for daily notification trigger. |
+| `transmart_core::number_of_workers` | | Number of threads to use for parallel features. |
 | `transmart_core::keycloak_server_url` |  | Identity provider server url, e.g., `https://oidc.example.com/auth`. |
 | `transmart_core::keycloak_realm` |  | A realm is container with clients, users and permissions, e.g., `transmart`. |
 | `transmart_core::keycloak_offline_token` |  | An offline token to fetch a new access token. See `https://www.keycloak.org/docs/3.2/server_admin/topics/sessions/offline.html` |
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
-| `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
+| `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. Only for the `app-server` server type. |
 
 
 ## License

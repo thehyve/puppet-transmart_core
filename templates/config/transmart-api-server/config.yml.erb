@@ -54,6 +54,10 @@ keycloakOffline:
     offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
 <% end -%>
 
+<% if scope.lookupvar('::transmart_core::params::number_of_workers') != :undef -%>
+org.transmartproject.system.numberOfWorkers: <%= scope.lookupvar('::transmart_core::params::number_of_workers').to_s %>
+<% end -%>
+
 <% if scope.lookupvar('::transmart_core::params::notifications_enabled') -%>
 org.transmartproject.notifications:
     # enable daily and weekly notification jobs
