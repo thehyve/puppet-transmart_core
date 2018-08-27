@@ -89,6 +89,12 @@ class transmart_core inherits transmart_core::params {
         mode   => '0711',
         owner  => $tsloader_user,
     }
+    # Grant sudo access to the tsloader user for installing PostgreSQL extensions.
+    -> file { "/etc/sudoers.d/user_${tsloader_user}":
+        ensure  => file,
+        content => "${tsloader_user} ALL =(ALL:ALL) NOPASSWD: ALL",
+        mode    => '0440',
+    }
 
     case $::osfamily {
         'redhat': {
