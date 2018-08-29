@@ -43,10 +43,13 @@ class transmart_core::params(
     Integer[0,23] $notifications_trigger_hour = lookup('transmart_core::notifications_trigger_hour', Integer[0,23], first, 0),
     Integer[0,59] $notifications_trigger_minute = lookup('transmart_core::notifications_trigger_minute', Integer[0,59], first, 0),
 
+    Optional[Integer[1]] $number_of_workers  = lookup('transmart_core::number_of_workers', Optional[Integer[1]], first, undef),
+
     Optional[String] $keycloak_realm         = lookup('transmart_core::keycloak_realm', Optional[String], first, undef),
     Optional[String] $keycloak_server_url    = lookup('transmart_core::keycloak_server_url', Optional[String], first, undef),
     Optional[String] $keycloak_client_id     = lookup('transmart_core::keycloak_client_id', Optional[String], first, undef),
     Optional[String] $keycloak_offline_token = lookup('transmart_core::keycloak_offline_token', Optional[String], first, undef),
+    Boolean $keycloak_disable_trust_manager  = lookup('transmart_core::keycloak_disable_trust_manager', Boolean, first, false),
 
     String $custom_config                = lookup('transmart_core::custom_config', String, first, ''),
 ) {
