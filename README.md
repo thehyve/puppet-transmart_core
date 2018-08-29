@@ -199,6 +199,7 @@ node 'test.example.com' {
     },
   }
 
+  # pspp is required for export to SPSS format.
   ensure_packages(['maven', 'pspp'], { ensure => 'present' })
 
   # Apply PostgreSQL configuration parameters, specified in Hiera
@@ -294,10 +295,6 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::version` | `17.1-RC9` | The version of the TranSMART artefacts to install. |
 | `transmart_core::db_user` | | The database admin username. (Mandatory) |
 | `transmart_core::db_password` | | The database admin password. (Mandatory) |
-| `transmart_core::db_type` | | The database type. [`postgresql`, `oracle`] |
-| `transmart_core::db_host` | `localhost` | The database server host name. |
-| `transmart_core::db_port` | `5432` / `1521` | The database server port. (`db_port_spec` in the `params` class.) |
-| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. (`db_name_spec` in the `params` class.) |
 | `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
 | `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
 | `transmart_core::memory` | `2g` | The memory limit for the JVM. |
@@ -316,7 +313,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
 
 The parameters for the `glowing_bear` module are documented in the [glowing_bear module repository](https://github.com/thehyve/puppet-glowing_bear),
-for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak).
+for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak/blob/master/REFERENCE.md).
 
 ### Parameters for the `app-server` server type
 
@@ -326,7 +323,7 @@ These parameters are only applicable when `server_type` is set to `app-server`.
 |-----------|---------------|-------------|
 | `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
 | `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`. |
-| `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. Only for the `app-server` server type. |
+| `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
 
 ### Advanced parameters
 
@@ -340,6 +337,10 @@ snapshot version of TranSMART, you need to change the repository.
 | `transmart_core::user` | `transmart` | System user that runs the application. |
 | `transmart_core::user_home` | `/home/${user}` | The user home directory |
 | `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
+| `transmart_core::db_type` | `postgresql` | The database type. [`postgresql`, `oracle`] |
+| `transmart_core::db_host` | `localhost` | The database server host name. |
+| `transmart_core::db_port` | `5432` / `1521` | The database server port. (`db_port_spec` in the `params` class.) |
+| `transmart_core::db_name` | `transmart` / `ORCL` | The database name. (`db_name_spec` in the `params` class.) |
 
 
 
