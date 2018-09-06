@@ -311,6 +311,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::keycloak_realm` |  | A realm is container with clients, users and permissions, e.g., `transmart`. |
 | `transmart_core::keycloak_offline_token` |  | An offline token to fetch a new access token. See `https://www.keycloak.org/docs/3.2/server_admin/topics/sessions/offline.html` |
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
+| `transmart_core::counts_threshold` | `0` | A patient threshold. Below which counts get hidden. |
 
 The parameters for the `glowing_bear` module are documented in the [glowing_bear module repository](https://github.com/thehyve/puppet-glowing_bear),
 for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak/blob/master/REFERENCE.md).
