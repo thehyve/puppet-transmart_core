@@ -20,7 +20,7 @@ dataSource:
     properties:
         jmxEnabled: true
         initialSize: 5
-        maxActive: 50
+        maxActive: <%= scope.lookupvar('::transmart_core::params::max_connections') %>
         minIdle: 5
         maxIdle: 25
         maxWait: 10000
