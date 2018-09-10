@@ -307,10 +307,12 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::notifications_trigger_hour` | `0` | Hour for daily notification trigger. |
 | `transmart_core::notifications_trigger_minute` | `0` | Minute for daily notification trigger. |
 | `transmart_core::number_of_workers` | | Number of threads to use for parallel features. |
+| `transmart_core::max_connections` | `50` | Maximum number of database connections used by the application. |
 | `transmart_core::keycloak_server_url` |  | Identity provider server url, e.g., `https://oidc.example.com/auth`. |
 | `transmart_core::keycloak_realm` |  | A realm is container with clients, users and permissions, e.g., `transmart`. |
 | `transmart_core::keycloak_offline_token` |  | An offline token to fetch a new access token. See `https://www.keycloak.org/docs/3.2/server_admin/topics/sessions/offline.html` |
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
+| `transmart_core::counts_threshold` | `0` | A patient threshold. Below which counts get hidden. |
 
 The parameters for the `glowing_bear` module are documented in the [glowing_bear module repository](https://github.com/thehyve/puppet-glowing_bear),
 for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak/blob/master/REFERENCE.md).
