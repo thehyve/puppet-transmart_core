@@ -7,11 +7,12 @@ PGPORT=<%= scope.lookupvar('::transmart_core::params::db_port') %>
 PGDATABASE=<%= scope.lookupvar('::transmart_core::params::db_name') %>
 PGUSER=<%= scope.lookupvar('::transmart_core::params::db_user') %>
 PGPASSWORD='<%= scope.lookupvar('::transmart_core::params::db_password') -%>'
+PGVERSION=<%= scope.lookupvar('::postgresql::globals::version') %>
 
 TABLESPACES=<%= scope.lookupvar('::postgresql::params::datadir') %>/../tablespaces/
 PGSQL_BIN="/usr/bin/"
 
-export PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD TABLESPACES PGSQL_BIN
+export PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD TABLESPACES PGSQL_BIN PGVERSION
 <% when 'oracle' -%>
 ORAHOST=<%= scope.lookupvar('::transmart_core::params::db_host') %>
 ORAPORT=<%= scope.lookupvar('::transmart_core::params::db_port') %>
