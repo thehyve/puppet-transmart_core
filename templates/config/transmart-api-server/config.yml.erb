@@ -76,3 +76,9 @@ org.transmartproject.notifications:
 <% if scope.lookupvar('::transmart_core::params::counts_threshold') != nil -%>
 org.transmartproject.patientCountThreshold: <%= scope.lookupvar('::transmart_core::params::counts_threshold').to_s %>
 <% end -%>
+<% if scope.lookupvar('::transmart_core::params::sender_email') != nil -%>
+grails:
+    mail:
+        'default':
+            from:  <%= scope.lookupvar('::transmart_core::params::sender_email').to_s %>
+<% end -%>

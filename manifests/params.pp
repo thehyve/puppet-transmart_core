@@ -52,6 +52,7 @@ class transmart_core::params(
     Optional[String] $keycloak_offline_token = lookup('transmart_core::keycloak_offline_token', Optional[String], first, undef),
     Boolean $keycloak_disable_trust_manager  = lookup('transmart_core::keycloak_disable_trust_manager', Boolean, first, false),
     Integer[0] $counts_threshold = lookup('transmart_core::counts_threshold', Integer[0], first, 0),
+    Optional[String] $sender_email = lookup('transmart_core::sender_email', Optional[String], first, undef),
 
     String $custom_config                = lookup('transmart_core::custom_config', String, first, ''),
 ) {
