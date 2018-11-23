@@ -25,5 +25,13 @@ describe 'transmart_core::config' do
       it { is_expected.to create_class('transmart_core::config') }
       it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml')}
     end
+    context "with sender email on #{os}" do
+      let(:facts) { facts }
+      let(:node) { 'email.example.com' }
+      it { is_expected.to create_class('transmart_core::config') }
+      it {
+        is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/usr@example.com/)
+      }
+    end
   end
 end
