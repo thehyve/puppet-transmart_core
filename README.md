@@ -207,6 +207,7 @@ node 'test.example.com' {
   create_resources('postgresql::server::config_entry', $postgres_config_entries)
 
   include ::transmart_core::api_essentials
+  include ::transmart_core::database
   include ::transmart_core::data
   include ::transmart_core::batch
 
