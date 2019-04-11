@@ -281,10 +281,10 @@ source ./vars
 Create the database, create the TranSMART schemas and populate dictionaries:
 ```bash
 # For PostgreSQL
-make -j4 postgres
+make postgres
 
 # For Oracle
-make -j4 oracle
+make oracle
 ```
 
 ### 6. Enable the `transmart-server` service and rerun Puppet
