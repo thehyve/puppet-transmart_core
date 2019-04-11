@@ -86,13 +86,14 @@ Check the installed modules:
 sudo puppet module list --tree
 ```
 
-### Install the `transmart_core` and `glowing_bear` modules
+### Install the `transmart_core`, `glowing_bear` and `gb_backend` modules
 
-Copy the `transmart_core` and `glowing_bear` module repositories to the `/etc/puppetlabs/code/modules` directory:
+Copy the `transmart_core`, `glowing_bear` and `gb_backend` module repositories to the `/etc/puppetlabs/code/modules` directory:
 ```bash
 cd /etc/puppetlabs/code/modules
 git clone https://github.com/thehyve/puppet-transmart_core.git transmart_core
 git clone https://github.com/thehyve/puppet-glowing_bear.git glowing_bear
+git clone https://github.com/thehyve/puppet-gb_backend.git gb_backend
 ```
 
 
@@ -128,7 +129,7 @@ Machine specific configuration can be placed in a machine specific file, e.g.,
 
 # Transmart API server configuration
 transmart_core::disable_server: true
-transmart_core::version: 17.1-HYVE-5-RC9
+transmart_core::version: 17.1-HYVE-5.9-RC1
 transmart_core::transmart_url: https://transmart.example.com
 transmart_core::number_of_workers: 2
 transmart_core::db_user: db_admin
@@ -138,7 +139,6 @@ transmart_core::server_type: api-server
 transmart_core::keycloak_realm: transmart
 transmart_core::keycloak_server_url: https://keycloak.example.com/auth
 transmart_core::keycloak_client_id: transmart-client
-transmart_core::keycloak_offline_token: eyJhbGciO...Z40g3-Q
 
 # Glowing Bear configuration
 glowing_bear::hostname: glowingbear.example.com
@@ -146,10 +146,21 @@ glowing_bear::port: 8085
 glowing_bear::app_url: https://glowingbear.example.com
 glowing_bear::transmart_url: https://transmart.example.com
 glowing_bear::repository: releases
-glowing_bear::version: 0.6.1-rc.2
+glowing_bear::version: 1.3.4
 glowing_bear::authentication_service_type: oidc
 glowing_bear::oidc_server_url: https://keycloak.example.com/auth/realms/transmart/protocol/openid-connect
 glowing_bear::oidc_client_id: transmart-client
+glowing_bear::gb_backend_url: https://gb-backend.example.com
+
+# Glowing Bear backend configuration
+gb_backend::repository: releases
+gb_backend::version: 0.3.0-RC1
+gb_backend::db_password: <password>
+gb_backend::transmart_server_url: http://localhost:8080
+gb_backend::keycloak_server_url: https://keycloak.example.com/auth
+gb_backend::keycloak_realm: transmart
+gb_backend::keycloak_client_id: transmart-client
+gb_backend::keycloak_offline_token: PLACEHOLDER  # only required for subscribe and notify
 
 # Keycloak configuration
 keycloak::proxy_https: true
@@ -229,10 +240,20 @@ node 'test.example.com' {
     ssl_key     => '/etc/ssl/private/example.key',
   }
 
+  include ::gb_backend
+
+  # Forward https://gb-backend.example.com to port 8083
+  nginx::resource::server { 'gb-backend.example.com':
+    ssl         => true,
+    proxy       => 'http://localhost:8083',
+    ssl_cert    => '/etc/ssl/certs/example.pem',
+    ssl_key     => '/etc/ssl/private/example.key',
+  }
+
 }
 ```
 
-This installs `keycloak`, `transmart-api-server`, `transmart-data`, `transmart-batch`, and `glowing-bear`
+This installs `keycloak`, `transmart-api-server`, `transmart-data`, `transmart-batch`, `glowing-bear` and `gb-backend`
 and prepares PostgreSQL for creating a TranSMART database.
 
 The node manifest can also be in another file, e.g., `site.pp`.
