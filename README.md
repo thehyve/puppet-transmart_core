@@ -139,6 +139,7 @@ transmart_core::server_type: api-server
 transmart_core::keycloak_realm: transmart
 transmart_core::keycloak_server_url: https://keycloak.example.com/auth
 transmart_core::keycloak_client_id: transmart-client
+transmart_core::keycloak_offline_token: PLACEHOLDER  # deprecated
 
 # Glowing Bear configuration
 glowing_bear::hostname: glowingbear.example.com
