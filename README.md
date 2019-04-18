@@ -22,8 +22,9 @@ which is expected to be released later this year.
 
 The instructions are for installing 
 - the [Keycloak] identity provider,
-- the [TranSMART API server](https://github.com/thehyve/transmart-core/tree/dev/transmart-api-server), and
+- the [TranSMART API server], and
 - the [Glowing Bear] user interface for TranSMART.
+- the [GB Backend] application for Glowing Bear.
 
 ### Install Puppet
 
@@ -307,7 +308,6 @@ sudo journalctl -u transmart-server.service -f
 > Glowing Bear should now be available on https://glowingbear.example.com (redirecting to Keycloak)
 
 
-
 ## Module parameters
    
 Overview of the parameters that can be used in Hiera to configure the module.
@@ -429,6 +429,7 @@ Check log of the service
 sudo journalctl -u transmart-server.service
 ```
 
+Same commands are applicable to `gb-backend.service`.
 
 
 ## Development
@@ -500,3 +501,5 @@ You should have received a copy of the [GNU General Public License](gpl-3.0.txt)
 
 [Keycloak]: https://www.keycloak.org/
 [Glowing Bear]: https://glowingbear.app/
+[TranSMART API server]: https://github.com/thehyve/transmart-core/tree/dev/transmart-api-server
+[GB Backend]: https://github.com/thehyve/gb-backend
