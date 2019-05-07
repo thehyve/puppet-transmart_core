@@ -75,8 +75,8 @@ configuring SSL certificates.
 
 The most convenient way is to run `puppet module install` as `root`:
 ```bash
-sudo puppet module install puppet-archive -v 1.3.0
-sudo puppet module install puppetlabs-java -v 2.4.0
+sudo puppet module install puppet-archive -v 3.0.0
+sudo puppet module install puppetlabs-java -v 3.3.0
 sudo puppet module install puppetlabs-postgresql
 sudo puppet module install treydock-keycloak --version 3.0.0
 sudo puppet module install puppet-nginx --version 0.13.0
@@ -130,7 +130,7 @@ Machine specific configuration can be placed in a machine specific file, e.g.,
 
 # Transmart API server configuration
 transmart_core::disable_server: true
-transmart_core::version: 17.1-HYVE-5.9-RC1
+transmart_core::version: 17.2.4
 transmart_core::transmart_url: https://transmart.example.com
 transmart_core::number_of_workers: 2
 transmart_core::db_user: db_admin
@@ -147,7 +147,7 @@ glowing_bear::hostname: glowingbear.example.com
 glowing_bear::port: 8085
 glowing_bear::transmart_url: https://transmart.example.com
 glowing_bear::repository: releases
-glowing_bear::version: 1.3.4
+glowing_bear::version: 2.0.8
 glowing_bear::authentication_service_type: oidc
 glowing_bear::oidc_server_url: https://keycloak.example.com/auth/realms/transmart/protocol/openid-connect
 glowing_bear::oidc_client_id: transmart-client
@@ -155,7 +155,7 @@ glowing_bear::gb_backend_url: https://gb-backend.example.com
 
 # Glowing Bear backend configuration
 gb_backend::repository: releases
-gb_backend::version: 0.3.0-RC1
+gb_backend::version: 1.0.3
 gb_backend::db_password: <password>
 gb_backend::transmart_server_url: http://localhost:8080
 gb_backend::keycloak_server_url: https://keycloak.example.com/auth
@@ -275,7 +275,7 @@ for setting up Keycloak with a realm and client for TranSMART.
 Source the `vars` file (as user `tsloader`):
 ```bash
 sudo -iu tsloader
-cd ~/transmart-data-17.1-*
+cd ~/transmart-data-17.2-*
 source ./vars
 ```
 Create the database, create the TranSMART schemas and populate dictionaries:
@@ -314,7 +314,7 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 
 | Hiera key | Default value | Description |
 |-----------|---------------|-------------|
-| `transmart_core::version` | `17.1-RC9` | The version of the TranSMART artefacts to install. |
+| `transmart_core::version` | `17.2.4` | The version of the TranSMART artefacts to install. |
 | `transmart_core::db_user` | | The database admin username. (Mandatory) |
 | `transmart_core::db_password` | | The database admin password. (Mandatory) |
 | `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
