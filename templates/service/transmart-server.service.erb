@@ -5,7 +5,7 @@ Description=TranSMART Service
 ExecStart=<%= @start_script %>
 User=<%= @user %>
 Restart=always
-StandardOutput=journal+console
+StandardOutput=journal
 
 [Install]
 WantedBy=multi-user.target

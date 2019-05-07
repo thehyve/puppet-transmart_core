@@ -8,7 +8,7 @@ ExecReload=<%= @solr_script %> restart
 ExecStop=<%= @solr_script %> stop
 User=<%= @user %>
 Restart=always
-StandardOutput=journal+console
+StandardOutput=journal
 
 [Install]
 WantedBy=multi-user.target
