@@ -145,7 +145,6 @@ transmart_core::keycloak_offline_token: PLACEHOLDER  # deprecated
 # Glowing Bear configuration
 glowing_bear::hostname: glowingbear.example.com
 glowing_bear::port: 8085
-glowing_bear::app_url: https://glowingbear.example.com
 glowing_bear::transmart_url: https://transmart.example.com
 glowing_bear::repository: releases
 glowing_bear::version: 1.3.4
