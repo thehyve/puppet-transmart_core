@@ -336,6 +336,8 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
 | `transmart_core::counts_threshold` | `0` | A patient threshold. Below which counts get hidden. |
 | `transmart_core::sender_email` | | Email address used in "from" field in the emails sent by transmart. |
+| `transmart_core::liquibase_on` | `false` | Enables DB update on startup by liquibase. |
+| `transmart_core::log2database` | `true` | Log to database by defaul. Be aware that should be false if liquibase is on. |
 
 The parameters for the `glowing_bear` module are documented in the [glowing_bear module repository](https://github.com/thehyve/puppet-glowing_bear),
 for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak/blob/master/REFERENCE.md).

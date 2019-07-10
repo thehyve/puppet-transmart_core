@@ -55,6 +55,12 @@ class transmart_core::params(
     Optional[String] $sender_email = lookup('transmart_core::sender_email', Optional[String], first, undef),
 
     String $custom_config                = lookup('transmart_core::custom_config', String, first, ''),
+
+    # to activate liquibase
+    Boolean $liquibase_on = lookup('transmart_core::liquibase_on', Boolean, first, false),
+
+    # Log to database by default
+    Boolean $log2database = lookup('transmart_core::log2database', Boolean, first, true),
 ) {
     # Database settings
     case $db_type {
