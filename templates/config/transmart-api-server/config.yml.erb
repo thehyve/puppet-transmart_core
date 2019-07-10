@@ -88,4 +88,4 @@ grails:
             updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
             updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
 
-org.transmartproject.system.writeLogToDatabase: <%= scope.lookupvar('::transmart_core::params::log2database'),to_s %>  # write log messages to the searchapp.search_app_access_log table
+org.transmartproject.system.writeLogToDatabase: <%= scope.lookupvar('::transmart_core::params::log2database').to_s %>  # write log messages to the searchapp.search_app_access_log table
