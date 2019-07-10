@@ -82,3 +82,8 @@ grails:
         'default':
             from:  <%= scope.lookupvar('::transmart_core::params::sender_email').to_s %>
 <% end -%>
+grails:
+    plugin:
+        databasemigration:
+            updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
+            updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
