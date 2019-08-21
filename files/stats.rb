@@ -15,10 +15,7 @@ class TransmartStatus < Sensu::Plugin::Metric::CLI::Graphite
          proc: ->(u) { URI(u) }
 
   def run
-    status = create_session
-    if status == 1
-      status = try_fetch_status
-    end
+    status = try_fetch_status
     timestamp = Time.now.to_i
     h = Time.now.hour
     output config[:scheme]+'.status', status, timestamp

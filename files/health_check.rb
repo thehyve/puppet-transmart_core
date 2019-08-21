@@ -13,9 +13,6 @@ class TransmartHealthCheck < Sensu::Plugin::Check::CLI
          proc: ->(u) { URI(u) }
 
   def run
-    session_cookie = create_session
-    puts "Got cookie: #{session_cookie}"
-
     status = try_fetch_status session_cookie
 
     ok 'Connection and status OK'
