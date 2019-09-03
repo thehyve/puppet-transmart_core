@@ -437,11 +437,11 @@ Same commands are applicable to `gb-backend.service`.
 
 ### Test
 
-The module has been tested on Ubuntu 16.04 with Puppet version 5.5.0.
+The module has been tested on Ubuntu 16.04 with Puppet version 5.5.1.
 There are some automated tests, run using [rake](https://github.com/ruby/rake).
 
-A version of `ruby` before `2.3` is required. [rvm](https://rvm.io/) can be used to install a specific version of `ruby`.
-Use `rvm install 2.1` to use `ruby` version `2.1`.
+A version of `ruby` before `2.4` is required. [rvm](https://rvm.io/) can be used to install a specific version of `ruby`.
+Use `rvm install 2.4` to use `ruby` version `2.4`.
 
 The tests are automatically run on our Bamboo server: [PUPPET-PUPPETTS](https://ci.ctmmtrait.nl/browse/PUPPET-PUPPETTS).
 
@@ -451,14 +451,14 @@ Install rake using the system-wide `ruby`:
 ```bash
 yum install ruby-devel
 gem install bundler
-export PUPPET_VERSION=4.8.2
+export PUPPET_VERSION=5.5.1
 bundle
 ```
 or using `rvm`:
 ```bash
-rvm install 2.3
+rvm install 2.4
 gem install bundler
-export PUPPET_VERSION=4.8.2
+export PUPPET_VERSION=5.5.1
 bundle
 ```
 Run the test suite:
@@ -489,7 +489,7 @@ Overview of the classes defined in this module.
 
 ## License
 
-Copyright &copy; 2017&ndash;2018 &nbsp; The Hyve.
+Copyright &copy; 2017&ndash;2019 &nbsp; The Hyve.
 
 The puppet module for TranSMART is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

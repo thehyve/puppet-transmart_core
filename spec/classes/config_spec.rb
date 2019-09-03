@@ -16,8 +16,7 @@ describe 'transmart_core::config' do
     context "with api-server server type on #{os}" do
       let(:facts) { facts }
       let(:node) { 'api2.example.com' }
-      it { is_expected.to create_class('transmart_core::config') }
-      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml')}
+      it { should compile.and_raise_error(/No realm specified/) }
     end
     context "with api-server server type and valid oidc configuration on #{os}" do
       let(:facts) { facts }

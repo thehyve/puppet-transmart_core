@@ -13,3 +13,7 @@ node 'api1.example.com' {
 node 'api2.example.com' {
     include ::transmart_core::api_essentials
 }
+
+node 'email.example.com' {
+    include ::transmart_core
+}
