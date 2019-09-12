@@ -4,12 +4,13 @@ dataSource:
 <% when 'postgresql' -%>
     driverClassName: org.postgresql.Driver
     dialect: org.hibernate.dialect.PostgreSQLDialect
+    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>?currentSchema=public
 <% when 'oracle' -%>
     driverClassName: oracle.jdbc.driver.OracleDriver
     dialect: org.hibernate.dialect.Oracle10gDialect
+    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>
 <% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
 <% end -%>
-    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>
     username: biomart_user
     password: <%= scope.lookupvar('::transmart_core::params::biomart_user_password') %>
     dbCreate: none
@@ -82,10 +83,9 @@ grails:
         'default':
             from:  <%= scope.lookupvar('::transmart_core::params::sender_email').to_s %>
 <% end -%>
-grails:
-    plugin:
-        databasemigration:
-            updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
-            updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
+
+grails.plugin.databasemigration:
+    updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
+    updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
 
 org.transmartproject.system.writeLogToDatabase: <%= scope.lookupvar('::transmart_core::params::log2database').to_s %>  # write log messages to the searchapp.search_app_access_log table

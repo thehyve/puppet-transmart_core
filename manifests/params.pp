@@ -95,6 +95,10 @@ class transmart_core::params(
         }
     }
 
+    if $liquibase_on and $log2database {
+        fail('When using Liquibase for database updates (liquibase_on), log2database should be false.')
+    }
+
     # Set transmart user home directory
     if $user_home == undef {
         $tsuser_home = "/home/${user}"

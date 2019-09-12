@@ -1,0 +1,9 @@
+---
+transmart_core::log2database: false
+transmart_core::liquibase_on: true
+
+transmart_core::server_type: api-server
+transmart_core::keycloak_realm: transmart
+transmart_core::keycloak_server_url: https://oidc.example.com
+transmart_core::keycloak_client_id: transmart-client
+transmart_core::keycloak_offline_token: eyJhbGciOXXXZ40g3-Q

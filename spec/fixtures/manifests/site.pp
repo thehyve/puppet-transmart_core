@@ -17,3 +17,8 @@ node 'api2.example.com' {
 node 'email.example.com' {
     include ::transmart_core
 }
+
+node 'db-update.example.com' {
+    include ::transmart_core::api_essentials
+    include ::transmart_core::liquibase
+}
