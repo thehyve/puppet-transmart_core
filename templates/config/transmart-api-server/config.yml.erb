@@ -50,8 +50,12 @@ keycloak:
     auth-server-url: <%= scope.lookupvar('::transmart_core::params::keycloak_server_url') %>
     resource: <%= scope.lookupvar('::transmart_core::params::keycloak_client_id') %>
     use-resource-role-mappings: true
+<% unless scope.lookupvar('::transmart_core::params::version').start_with?('17.1') -%>
+    verify-token-audience: true
+<% end -%>
 <% if scope.lookupvar('::transmart_core::params::keycloak_disable_trust_manager') -%>
     disable-trust-manager: true
+
 <% end -%>
 
 keycloakOffline:

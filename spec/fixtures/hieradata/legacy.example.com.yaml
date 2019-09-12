@@ -1,8 +1,8 @@
 ---
-transmart_core::version: 17.2.1
+transmart_core::version: 17.1-HYVE-6.2
 
-transmart_core::log2database: false
-transmart_core::liquibase_on: true
+transmart_core::db_user: test
+transmart_core::db_password: Passw0rd1!
 
 transmart_core::server_type: api-server
 transmart_core::keycloak_realm: transmart

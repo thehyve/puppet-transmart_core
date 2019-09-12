@@ -32,12 +32,20 @@ describe 'transmart_core::config' do
         is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/usr@example.com/)
       }
     end
-    context "with api-server server type and and database update on startup on #{os}" do
+    context "with api-server server type and database update on startup on #{os}" do
       let(:facts) { facts }
       let(:node) { 'db-update.example.com' }
       it { is_expected.to create_class('transmart_core::config') }
       it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/updateOnStart: true/)}
       it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/writeLogToDatabase: false/)}
+      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/verify-token-audience: true/)}
+    end
+    context "with api-server server type and legacy version on #{os}" do
+      let(:facts) { facts }
+      let(:node) { 'legacy.example.com' }
+      it { is_expected.to create_class('transmart_core::config') }
+      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml') }
+      it { is_expected.to_not contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/verify-token-audience: true/)}
     end
   end
 end

@@ -22,3 +22,7 @@ node 'db-update.example.com' {
     include ::transmart_core::api_essentials
     include ::transmart_core::liquibase
 }
+
+node 'legacy.example.com' {
+    include ::transmart_core::api_essentials
+}
