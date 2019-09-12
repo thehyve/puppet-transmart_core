@@ -3,6 +3,10 @@ transmart_core::version: 17.2.1
 
 transmart_core::log2database: false
 transmart_core::liquibase_on: true
+transmart_core::install_pg_bitcount: true
+
+postgresql::globals::manage_package_repo: true
+postgresql::globals::version: '11'
 
 transmart_core::server_type: api-server
 transmart_core::keycloak_realm: transmart

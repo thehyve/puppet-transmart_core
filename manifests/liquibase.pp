@@ -31,7 +31,26 @@ class transmart_core::liquibase inherits transmart_core::params {
     db        => $db_name,
     privilege => 'ALL',
     role      => 'biomart_user',
+  }
+
+  if ($::transmart_core::params::install_pg_bitcount) {
+    $postgresql_version = $::postgresql::globals::version
+    $pg_bitcount_package = "postgresql-${$postgresql_version}-pg-bitcount"
+    $pg_bitcount_package_version = '0.0.3-1'
+    $pg_bitcount_deb = "postgresql-${$postgresql_version}-pg-bitcount_${pg_bitcount_package_version}_amd64.deb"
+
+    archive { "/opt/${pg_bitcount_deb}":
+      ensure  => present,
+      source  => "https://github.com/thehyve/pg_bitcount/releases/download/${pg_bitcount_package_version}/${pg_bitcount_deb}",
+      creates => "/opt/${pg_bitcount_deb}",
+      cleanup => false,
+      user    => root,
     }
+    -> package { $pg_bitcount_package:
+      ensure   => latest,
+      provider => dpkg,
+      source   => "/opt/${pg_bitcount_deb}"
+    }
+  }
 
 }
-
