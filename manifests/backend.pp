@@ -31,9 +31,6 @@ class transmart_core::backend inherits transmart_core::params {
         if $::transmart_core::params::keycloak_client_id == undef {
             fail('No OpenID Connect client configured. Please configure transmart_core::keycloak_client_id')
         }
-        if $::transmart_core::params::keycloak_offline_token == undef {
-            fail('No offline token specified. Please configure transmart_core::keycloak_offline_token')
-        }
 
         $package_name = 'transmart-api-server'
         $config_location = "${::transmart_core::params::tsuser_home}/transmart-api-server.config.yml"

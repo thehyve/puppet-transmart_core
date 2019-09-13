@@ -58,6 +58,7 @@ class transmart_core::params(
 
     # to activate liquibase
     Boolean $liquibase_on = lookup('transmart_core::liquibase_on', Boolean, first, false),
+    Boolean $install_pg_bitcount = lookup('transmart_core::install_pg_bitcount', Boolean, first, false),
 
     # Log to database by default
     Boolean $log2database = lookup('transmart_core::log2database', Boolean, first, true),
@@ -93,6 +94,10 @@ class transmart_core::params(
         default: {
             fail("Unsupported database type: '${db_type}'. Options: postgresql, oracle.")
         }
+    }
+
+    if $liquibase_on and $log2database {
+        fail('When using Liquibase for database updates (liquibase_on), log2database should be false.')
     }
 
     # Set transmart user home directory

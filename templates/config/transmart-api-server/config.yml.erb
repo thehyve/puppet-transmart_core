@@ -4,12 +4,13 @@ dataSource:
 <% when 'postgresql' -%>
     driverClassName: org.postgresql.Driver
     dialect: org.hibernate.dialect.PostgreSQLDialect
+    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>?currentSchema=public
 <% when 'oracle' -%>
     driverClassName: oracle.jdbc.driver.OracleDriver
     dialect: org.hibernate.dialect.Oracle10gDialect
+    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>
 <% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
 <% end -%>
-    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>
     username: biomart_user
     password: <%= scope.lookupvar('::transmart_core::params::biomart_user_password') %>
     dbCreate: none
@@ -49,12 +50,18 @@ keycloak:
     auth-server-url: <%= scope.lookupvar('::transmart_core::params::keycloak_server_url') %>
     resource: <%= scope.lookupvar('::transmart_core::params::keycloak_client_id') %>
     use-resource-role-mappings: true
+<% unless scope.lookupvar('::transmart_core::params::version').start_with?('17.1') -%>
+    verify-token-audience: true
+<% end -%>
 <% if scope.lookupvar('::transmart_core::params::keycloak_disable_trust_manager') -%>
     disable-trust-manager: true
+
 <% end -%>
 
-keycloakOffline:
-    offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
+<% if scope.lookupvar('::transmart_core::params::keycloak_offline_token') != nil -%>
+keycloakOffline.offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
+
+<% end -%>
 <% end -%>
 
 <% if scope.lookupvar('::transmart_core::params::number_of_workers') != nil -%>
@@ -82,10 +89,9 @@ grails:
         'default':
             from:  <%= scope.lookupvar('::transmart_core::params::sender_email').to_s %>
 <% end -%>
-grails:
-    plugin:
-        databasemigration:
-            updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
-            updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
+
+grails.plugin.databasemigration:
+    updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
+    updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
 
 org.transmartproject.system.writeLogToDatabase: <%= scope.lookupvar('::transmart_core::params::log2database').to_s %>  # write log messages to the searchapp.search_app_access_log table

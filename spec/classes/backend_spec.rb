@@ -21,5 +21,10 @@ describe 'transmart_core::backend' do
       let(:node) { 'api1.example.com' }
       it { is_expected.to create_class('transmart_core::backend') }
     end
+    context "with api-server server type and database update on startup on #{os}" do
+      let(:facts) { facts }
+      let(:node) { 'db-update.example.com' }
+      it { is_expected.to create_class('transmart_core::backend') }
+    end
   end
 end

@@ -336,8 +336,9 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
 | `transmart_core::counts_threshold` | `0` | A patient threshold. Below which counts get hidden. |
 | `transmart_core::sender_email` | | Email address used in "from" field in the emails sent by transmart. |
-| `transmart_core::liquibase_on` | `false` | Enables DB update on startup by liquibase. |
+| `transmart_core::liquibase_on` | `false` | Enables DB update on startup by liquibase. Requires `log2database` to be `false` and `::transmart_core::liquibase` to be included. |
 | `transmart_core::log2database` | `true` | Log to database by default. Be aware that should be false if liquibase is on. |
+| `transmart_core::install_pg_bitcount` | `false` | Install the [pg_bitcount] module for PostgreSQL. Only supported for Debian/Ubuntu based systems. |
 
 The parameters for the `glowing_bear` module are documented in the [glowing_bear module repository](https://github.com/thehyve/puppet-glowing_bear),
 for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak/blob/master/REFERENCE.md).
@@ -484,6 +485,7 @@ Overview of the classes defined in this module.
 | `::transmart_core::thehyve_repositories` | Configures The Hyve repositories for `apt` or `yum`. |
 | `::transmart_core::complete` | Installs all of the above. |
 | `::transmart_core::database` | Installs `postgresql` with the database admin credentials and required tablespace directories. |
+| `::transmart_core::liquibase` | Installs `postgresql` and creates a database for use with `liquibase_on: true`. |
 
 
 
@@ -504,3 +506,4 @@ You should have received a copy of the [GNU General Public License](gpl-3.0.txt)
 [Glowing Bear]: https://glowingbear.app/
 [TranSMART API server]: https://github.com/thehyve/transmart-core/tree/dev/transmart-api-server
 [GB Backend]: https://github.com/thehyve/gb-backend
+[pg_bitcount]: https://github.com/thehyve/pg_bitcount
