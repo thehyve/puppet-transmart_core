@@ -22,7 +22,7 @@ describe 'transmart_core::config' do
       let(:facts) { facts }
       let(:node) { 'api1.example.com' }
       it { is_expected.to create_class('transmart_core::config') }
-      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml')}
+      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/keycloakOffline.offlineToken:/) }
     end
     context "with sender email on #{os}" do
       let(:facts) { facts }
@@ -39,13 +39,14 @@ describe 'transmart_core::config' do
       it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/updateOnStart: true/)}
       it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/writeLogToDatabase: false/)}
       it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/verify-token-audience: true/)}
+      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').without_content(/keycloakOffline.offlineToken:/) }
     end
     context "with api-server server type and legacy version on #{os}" do
       let(:facts) { facts }
       let(:node) { 'legacy.example.com' }
       it { is_expected.to create_class('transmart_core::config') }
-      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml') }
-      it { is_expected.to_not contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/verify-token-audience: true/)}
+      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').with_content(/keycloakOffline.offlineToken:/) }
+      it { is_expected.to contain_file('/home/transmart/transmart-api-server.config.yml').without_content(/verify-token-audience: true/) }
     end
   end
 end

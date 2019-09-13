@@ -58,8 +58,10 @@ keycloak:
 
 <% end -%>
 
-keycloakOffline:
-    offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
+<% if scope.lookupvar('::transmart_core::params::keycloak_offline_token') != nil -%>
+keycloakOffline.offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
+
+<% end -%>
 <% end -%>
 
 <% if scope.lookupvar('::transmart_core::params::number_of_workers') != nil -%>
