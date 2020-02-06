@@ -1,5 +1,7 @@
 # Puppet module for TranSMART.
 
+[![Build Status](https://travis-ci.org/thehyve/puppet-transmart_core.svg?branch=master)](https://travis-ci.org/thehyve/puppet-transmart_core/branches)
+
 This is the repository containing a puppet module for deploying the _TranSMART_ application.
 TranSMART is an open source data sharing and analytics platform for translational biomedical research, which
 is maintained by the [tranSMART Foundation](http://transmartfoundation.org). Official releases
