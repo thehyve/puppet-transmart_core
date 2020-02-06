@@ -15,8 +15,7 @@ and downloads and configures dataloading tools `transmart-data` and `transmart-b
 user `tsloader`.
 The repository used to fetch the required TranSMART packages from is configurable and defaults to `repo.thehyve.nl`.
 
-This module only supports the [development version of TranSMART](https://github.com/thehyve/transmart-core),
-which is expected to be released later this year.
+This module only supports the [17.x versions of TranSMART](https://github.com/thehyve/transmart-core).
 
 
 
