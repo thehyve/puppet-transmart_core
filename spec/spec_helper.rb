@@ -6,19 +6,23 @@ RSpec.configure do |c|
   c.hiera_config = './spec/fixtures/hiera.yaml'
 
   c.before(:each) do
-    Puppet::Parser::Functions.newfunction(:postgresql_password, :type => :rvalue, :doc => <<-EOS
-        Returns the postgresql password hash from the clear text username / password.
-    EOS
-    ) do |args|
+    # @summary This function returns the postgresql password hash from the clear text username / password
+    Puppet::Functions.create_function(:'postgresql::postgresql_password') do
+      # @param username
+      #   The clear text `username`
+      # @param password
+      #   The clear text `password`
+      #
+      # @return [String]
+      #   The postgresql password hash from the clear text username / password.
+      dispatch :default_impl do
+        param 'Variant[String[1],Integer]', :username
+        param 'Variant[String[1],Integer]', :password
+      end
 
-      raise(Puppet::ParseError, "postgresql_password(): Wrong number of arguments " +
-          "given (#{args.size} for 2)") if args.size != 2
-
-      username = args[0]
-      password = args[1]
-
-      'md5' + password.to_s + username.to_s
+      def default_impl(username, password)
+        'md5' + password.to_s + username.to_s
+      end
     end
   end
 end
-

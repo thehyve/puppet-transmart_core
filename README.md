@@ -439,13 +439,11 @@ Same commands are applicable to `gb-backend.service`.
 
 ### Test
 
-The module has been tested on Ubuntu 16.04 with Puppet version 5.5.1.
+The module has been tested on Ubuntu 16.04 with Puppet version 5.5.22.
 There are some automated tests, run using [rake](https://github.com/ruby/rake).
 
 A version of `ruby` before `2.4` is required. [rvm](https://rvm.io/) can be used to install a specific version of `ruby`.
 Use `rvm install 2.4` to use `ruby` version `2.4`.
-
-The tests are automatically run on our Bamboo server: [PUPPET-PUPPETTS](https://ci.ctmmtrait.nl/browse/PUPPET-PUPPETTS).
 
 #### Rake tests
 
@@ -453,14 +451,14 @@ Install rake using the system-wide `ruby`:
 ```bash
 yum install ruby-devel
 gem install bundler
-export PUPPET_VERSION=5.5.1
+export PUPPET_VERSION=5.5.22
 bundle
 ```
 or using `rvm`:
 ```bash
 rvm install 2.4
 gem install bundler
-export PUPPET_VERSION=5.5.1
+export PUPPET_VERSION=5.5.22
 bundle
 ```
 Run the test suite:
