@@ -18,7 +18,7 @@ class transmart_core::liquibase inherits transmart_core::params {
   }
   # Create database superuser
   -> postgresql::server::role { 'biomart_user':
-    password_hash => postgresql_password('biomart_user', $biomart_user_password),
+    password_hash => postgresql::postgresql_password('biomart_user', $biomart_user_password),
     superuser     => true,
     login         => true,
   }
