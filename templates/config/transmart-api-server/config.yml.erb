@@ -19,28 +19,14 @@ dataSource:
     logSql: false
     formatql: false
     properties:
-        jmxEnabled: true
-        initialSize: 5
-        maxActive: <%= scope.lookupvar('::transmart_core::params::max_connections') %>
-        minIdle: 5
-        maxIdle: 25
-        maxWait: 10000
-        maxAge: 600000
-        timeBetweenEvictionRunsMillis: 5000
-        minEvictableIdleTimeMillis: 60000
+        maximumPoolSize: <%= scope.lookupvar('::transmart_core::params::max_connections') %>
+        minimumIdle: 15
 <% case scope.lookupvar('::transmart_core::params::db_type') -%>
 <% when 'postgresql' -%>
         validationQuery: select 1
 <% when 'oracle' -%>
         validationQuery: select 1 from dual
 <% end -%>
-        validationQueryTimeout: 3
-        validationInterval: 15000
-        testOnBorrow: true
-        testWhileIdle: true
-        testOnReturn: false
-        jdbcInterceptors: ConnectionState
-        defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
 
 <% case scope.lookupvar('::transmart_core::params::server_type') -%>
 <% when 'api-server' -%>
