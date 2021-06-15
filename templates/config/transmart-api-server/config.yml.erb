@@ -5,10 +5,6 @@ dataSource:
     driverClassName: org.postgresql.Driver
     dialect: org.hibernate.dialect.PostgreSQLDialect
     url: <%= scope.lookupvar('::transmart_core::params::db_url') %>?currentSchema=public
-<% when 'oracle' -%>
-    driverClassName: oracle.jdbc.driver.OracleDriver
-    dialect: org.hibernate.dialect.Oracle10gDialect
-    url: <%= scope.lookupvar('::transmart_core::params::db_url') %>
 <% else raise "Unknown database type. Check transmart_core::params::db_type" -%>
 <% end -%>
     username: biomart_user
@@ -28,56 +24,21 @@ dataSource:
         validationQuery: select 1 from dual
 <% end -%>
 
-<% case scope.lookupvar('::transmart_core::params::server_type') -%>
-<% when 'api-server' -%>
 keycloak:
     realm: <%= scope.lookupvar('::transmart_core::params::keycloak_realm') %>
     bearer-only: true
     auth-server-url: <%= scope.lookupvar('::transmart_core::params::keycloak_server_url') %>
     resource: <%= scope.lookupvar('::transmart_core::params::keycloak_client_id') %>
     use-resource-role-mappings: true
-<% unless scope.lookupvar('::transmart_core::params::version').start_with?('17.1') -%>
     verify-token-audience: true
-<% end -%>
-<% if scope.lookupvar('::transmart_core::params::keycloak_disable_trust_manager') -%>
-    disable-trust-manager: true
-
-<% end -%>
-
-<% if scope.lookupvar('::transmart_core::params::keycloak_offline_token') != nil -%>
-keycloakOffline.offlineToken: <%= scope.lookupvar('::transmart_core::params::keycloak_offline_token') %>
-
-<% end -%>
-<% end -%>
 
 <% if scope.lookupvar('::transmart_core::params::number_of_workers') != nil -%>
 org.transmartproject.system.numberOfWorkers: <%= scope.lookupvar('::transmart_core::params::number_of_workers').to_s %>
 <% end -%>
 
-<% if scope.lookupvar('::transmart_core::params::notifications_enabled') -%>
-org.transmartproject.notifications:
-    # enable daily and weekly notification jobs
-    enabled: true
-    # max number of query sets returned in a subscription email
-    maxNumberOfSets: <%= scope.lookupvar('::transmart_core::params::notifications_sets').to_s %>
-    # daily cron job trigger time in format: hh-mm
-    # hh: Hour, range: 0-23;
-    # mm: Minute, range: 0-59;
-    dailyJobTriggerTime: <%= scope.lookupvar('::transmart_core::params::notifications_trigger_hour').to_s %>-<%= scope.lookupvar('::transmart_core::params::notifications_trigger_minute').to_s %>
-<% end -%>
-
-<% if scope.lookupvar('::transmart_core::params::counts_threshold') != nil -%>
-org.transmartproject.patientCountThreshold: <%= scope.lookupvar('::transmart_core::params::counts_threshold').to_s %>
-<% end -%>
-<% if scope.lookupvar('::transmart_core::params::sender_email') != nil -%>
-grails:
-    mail:
-        'default':
-            from:  <%= scope.lookupvar('::transmart_core::params::sender_email').to_s %>
-<% end -%>
 
 grails.plugin.databasemigration:
     updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
     updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
 
-org.transmartproject.system.writeLogToDatabase: <%= scope.lookupvar('::transmart_core::params::log2database').to_s %>  # write log messages to the searchapp.search_app_access_log table
+org.transmartproject.system.writeLogToDatabase: false

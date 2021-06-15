@@ -8,11 +8,9 @@ is maintained by the [tranSMART Foundation](http://transmartfoundation.org). Off
 can be found on the TranSMART Foundation website, and the TranSMART Foundation's development repositories
 can be found at <https://github.com/transmart/>.
 
-The module creates system users `transmart` and `tsloader` (unless they are configured to different names),
-installs and configures services `transmart-server`, `transmart-solr` and `transmart-rserve`
-(`systemd` processes run as user `transmart`),
-and downloads and configures dataloading tools `transmart-data` and `transmart-batch` in the home directory of
-user `tsloader`.
+The module creates system user `transmart` (unless it is configured to a different name) and
+installs and configures service `transmart-server`
+(a `systemd` process run as user `transmart`).
 The repository used to fetch the required TranSMART packages from is configurable and defaults to `repo.thehyve.nl`.
 
 This module only supports the [17.x versions of TranSMART](https://github.com/thehyve/transmart-core).
@@ -39,7 +37,7 @@ sudo dpkg -i puppet5-release-xenial.deb
 sudo apt update
 sudo apt install puppet5-release
 
-# Check Puppet version, Puppet 4.8 and Puppet 5 should be fine.
+# Check Puppet version, Puppet 5 should be fine.
 puppet --version
 ```
 
@@ -48,23 +46,6 @@ puppet --version
 The module expects certain packages to be available through the package manager of the operating system (e.g., `yum` or `apt`):
 - For all components:
   - `java-1.8.0-openjdk`
-- For `transmart-rserve`:
-  - `libpng12`
-  - `cairo`
-  - `dejavu-sans-fonts`
-  - `dejavu-sans-mono-fonts`
-  - `dejavu-serif-fonts`
-  - `libgfortran`
-  - `libgomp`
-  - `pango`
-  - `readline`
-  - `urw-fonts`
-  - `xorg-x11-fonts-Type1`
-  - `xorg-x11-fonts-misc`
-- For `transmart-data`:
-  - `php`
-  - `groovy`
-  - `make`
 
 ### Puppet modules
 
@@ -108,20 +89,17 @@ with aliases `keycloak.example.com`, `transmart.example.com`, `glowingbear.examp
 For configuring TranSMART using this module, the following steps are required:
 1. Setting up a Hiera configuration file;
 2. Setting up a node manifest;
-3. Run Puppet without starting the `transmart-server` service;
-4. Configure Keycloak;
-5. Create a TranSMART database with `transmart-data`;
-6. Enable the `transmart-server` service and rerun Puppet.
+3. Configure Keycloak;
+4. Run Puppet to start the `transmart-server` service;
 
 ### 1. Configuring a node using Hiera
 
 It is preferred to configure the module parameters using Hiera.
 To get started with Hiera, 
-see the documentation for [Puppet 4.8](https://puppet.com/docs/hiera/3.2/) or [Puppet 5.5](https://puppet.com/docs/puppet/5.5/hiera_quick.html) (they are quite different).
+see the documentation for [Puppet 5.5](https://puppet.com/docs/puppet/5.5/hiera_quick.html).
  
 Defaults can be configured in a `common.yaml` file, e.g.:
 ```yaml
-transmart_core::server_type: api-server
 transmart_core::keycloak_server_url: https://keycloak.example.com/auth
 ```
 
@@ -130,18 +108,16 @@ Machine specific configuration can be placed in a machine specific file, e.g.,
 ```yaml
 
 # Transmart API server configuration
-transmart_core::disable_server: true
+# transmart_core::disable_server: true
 transmart_core::version: 17.2.4
-transmart_core::transmart_url: https://transmart.example.com
 transmart_core::number_of_workers: 2
 transmart_core::db_user: db_admin
 transmart_core::db_password: <password>
 transmart_core::memory: 8g
-transmart_core::server_type: api-server
 transmart_core::keycloak_realm: transmart
 transmart_core::keycloak_server_url: https://keycloak.example.com/auth
 transmart_core::keycloak_client_id: transmart-client
-transmart_core::keycloak_offline_token: PLACEHOLDER  # deprecated
+transmart_core::liquibase_on: true
 
 # Glowing Bear configuration
 glowing_bear::hostname: glowingbear.example.com
@@ -213,7 +189,7 @@ node 'test.example.com' {
   }
 
   # pspp is required for export to SPSS format.
-  ensure_packages(['maven', 'pspp'], { ensure => 'present' })
+  ensure_packages(['pspp'], { ensure => 'present' })
 
   # Apply PostgreSQL configuration parameters, specified in Hiera
   $postgres_config_entries = hiera_hash('postgres_config', {})
@@ -221,8 +197,6 @@ node 'test.example.com' {
 
   include ::transmart_core::api_essentials
   include ::transmart_core::database
-  include ::transmart_core::data
-  include ::transmart_core::batch
 
   # Forward https://transmart.example.com to port 8080
   nginx::resource::server { 'transmart.example.com':
@@ -251,50 +225,21 @@ node 'test.example.com' {
     ssl_cert    => '/etc/ssl/certs/example.pem',
     ssl_key     => '/etc/ssl/private/example.key',
   }
-
 }
 ```
 
-This installs `keycloak`, `transmart-api-server`, `transmart-data`, `transmart-batch`, `glowing-bear` and `gb-backend`
+This installs `keycloak`, `transmart-api-server`, `glowing-bear` and `gb-backend`
 and prepares PostgreSQL for creating a TranSMART database.
 
 The node manifest can also be in another file, e.g., `site.pp`.
 
-### 3. Run Puppet without starting the `transmart-server` service
-
-```bash
-sudo puppet apply test.example.com.pp
-```
-
-### 4. Configure Keycloak
+### 3. Configure Keycloak
 
 Follow the steps in the [API server documentation](https://github.com/thehyve/transmart-core/tree/dev/transmart-api-server)
 for setting up Keycloak with a realm and client for TranSMART.
 
-### 5. Create a TranSMART database with `transmart-data`
+### 4. Run Puppet to start the `transmart-server` service
 
-Source the `vars` file (as user `tsloader`):
-```bash
-sudo -iu tsloader
-cd ~/transmart-data-17.2-*
-source ./vars
-```
-Create the database, create the TranSMART schemas and populate dictionaries:
-```bash
-# For PostgreSQL
-make postgres
-
-# For Oracle
-make oracle
-```
-
-### 6. Enable the `transmart-server` service and rerun Puppet
-
-Edit one line in the Hiera file:
-```yaml
-transmart_core::disable_server: false
-```
-and rerun Puppet:
 ```bash
 sudo puppet apply test.example.com.pp
 ```
@@ -319,40 +264,19 @@ Alternatively, the parameters of the `::transmart_core::params` class can be use
 | `transmart_core::db_user` | | The database admin username. (Mandatory) |
 | `transmart_core::db_password` | | The database admin password. (Mandatory) |
 | `transmart_core::biomart_user_password` | | The password of the `biomart_user` database user. |
-| `transmart_core::tm_cz_user_password` | | The password of the `tm_cz_user` database user. |
 | `transmart_core::memory` | `2g` | The memory limit for the JVM. |
 | `transmart_core::app_port` | `8080` | The port the `transmart-server` application runs on. |
-| `transmart_core::transmart_url` | | The external address of the application. |
 | `transmart_core::disable_server` | `false` | (Temporarily) disable `transmart-server`. |
-| `transmart_core::server_type` | `app-server` | [`app-server`, `api-server`] |
-| `transmart_core::notifications_enabled` | `false` | Enable notifications for query subscriptions. |
-| `transmart_core::notifications_sets` | `20` | Number of sets. |
-| `transmart_core::notifications_trigger_hour` | `0` | Hour for daily notification trigger. |
-| `transmart_core::notifications_trigger_minute` | `0` | Minute for daily notification trigger. |
 | `transmart_core::number_of_workers` | | Number of threads to use for parallel features. |
 | `transmart_core::max_connections` | `50` | Maximum number of database connections used by the application. |
 | `transmart_core::keycloak_server_url` |  | Identity provider server url, e.g., `https://oidc.example.com/auth`. |
 | `transmart_core::keycloak_realm` |  | A realm is container with clients, users and permissions, e.g., `transmart`. |
-| `transmart_core::keycloak_offline_token` |  | An offline token to fetch a new access token. See `https://www.keycloak.org/docs/3.2/server_admin/topics/sessions/offline.html` |
 | `transmart_core::keycloak_client_id` |  | OpenID Connect client id, e.g., `transmart-client`. |
-| `transmart_core::counts_threshold` | `0` | A patient threshold. Below which counts get hidden. |
-| `transmart_core::sender_email` | | Email address used in "from" field in the emails sent by transmart. |
 | `transmart_core::liquibase_on` | `false` | Enables DB update on startup by liquibase. Requires `log2database` to be `false` and `::transmart_core::liquibase` to be included. |
-| `transmart_core::log2database` | `true` | Log to database by default. Be aware that should be false if liquibase is on. |
 | `transmart_core::install_pg_bitcount` | `false` | Install the [pg_bitcount] module for PostgreSQL. Only supported for Debian/Ubuntu based systems. |
 
 The parameters for the `glowing_bear` module are documented in the [glowing_bear module repository](https://github.com/thehyve/puppet-glowing_bear),
 for Keycloak, consult the [keycloak module repository](https://github.com/treydock/puppet-module-keycloak/blob/master/REFERENCE.md).
-
-### Parameters for the `app-server` server type
-
-These parameters are only applicable when `server_type` is set to `app-server`.
-
-| Hiera key | Default value | Description |
-|-----------|---------------|-------------|
-| `transmart_core::cors_enabled` | `true` | Enables cross-origin resource sharing. |
-| `transmart_core::clients` | `{}` | Enable OAuth2 clients and configure redirect URIs, e.g., `{'glowingbear-js' => ['http://localhost:4200']}`. |
-| `transmart_core::custom_config` | | A custom fragment of configuration. This will be appended to `application.groovy`. |
 
 ### Advanced parameters
 
@@ -365,8 +289,7 @@ snapshot version of TranSMART, you need to change the repository.
 | `transmart_core::repository` | `releases` | The repository to use. [`snapshots`, `releases`] |
 | `transmart_core::user` | `transmart` | System user that runs the application. |
 | `transmart_core::user_home` | `/home/${user}` | The user home directory |
-| `transmart_core::tsloader_user` | `tsloader` | System user for loading data. |
-| `transmart_core::db_type` | `postgresql` | The database type. [`postgresql`, `oracle`] |
+| `transmart_core::db_type` | `postgresql` | The database type. [`postgresql`] |
 | `transmart_core::db_host` | `localhost` | The database server host name. |
 | `transmart_core::db_port` | `5432` / `1521` | The database server port. (`db_port_spec` in the `params` class.) |
 | `transmart_core::db_name` | `transmart` / `ORCL` | The database name. (`db_name_spec` in the `params` class.) |

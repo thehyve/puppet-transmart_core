@@ -46,6 +46,4 @@ class transmart_core::database inherits transmart_core::params {
         location => "${tablespaces_root}indx",
         require  => [Class['::postgresql::server'], File[$tablespaces_root]],
     }
-
 }
-

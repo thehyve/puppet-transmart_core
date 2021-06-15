@@ -1,5 +1,0 @@
----
-transmart_core::db_user: usr
-transmart_core::db_password: psw
-transmart_core::server_type: api-server
-transmart_core::sender_email: usr@example.com

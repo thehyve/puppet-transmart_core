@@ -12,7 +12,6 @@ class transmart_core::backend inherits transmart_core::params {
     $app_opts = "-Dserver.port=${app_port} -Djava.security.egd=file:///dev/urandom "
     $start_script = "${home}/start"
     $logs_dir = "${home}/logs"
-    $jobs_dir = $::transmart_core::params::jobs_directory
 
     if $::transmart_core::params::disable_server {
         $server_status = stopped
@@ -20,25 +19,20 @@ class transmart_core::backend inherits transmart_core::params {
         $server_status = running
     }
 
-    if $::transmart_core::params::server_type == 'api-server' {
-        # Check authentication settings
-        if $::transmart_core::params::keycloak_realm == undef {
-            fail('No realm specified. Please configure transmart_core::keycloak_realm')
-        }
-        if $::transmart_core::params::keycloak_server_url == undef {
-            fail('No OpenID Connect server configured. Please configure transmart_core::keycloak_server_url')
-        }
-        if $::transmart_core::params::keycloak_client_id == undef {
-            fail('No OpenID Connect client configured. Please configure transmart_core::keycloak_client_id')
-        }
-
-        $package_name = 'transmart-api-server'
-        $config_location = "${::transmart_core::params::tsuser_home}/transmart-api-server.config.yml"
-        $config_opts = "-Dspring.config.location=${config_location}"
-    } else {
-        $package_name = 'transmart-server'
-        $config_opts = ''
+    # Check authentication settings
+    if $::transmart_core::params::keycloak_realm == undef {
+        fail('No realm specified. Please configure transmart_core::keycloak_realm')
     }
+    if $::transmart_core::params::keycloak_server_url == undef {
+        fail('No OpenID Connect server configured. Please configure transmart_core::keycloak_server_url')
+    }
+    if $::transmart_core::params::keycloak_client_id == undef {
+        fail('No OpenID Connect client configured. Please configure transmart_core::keycloak_client_id')
+    }
+
+    $package_name = 'transmart-api-server'
+    $config_location = "${::transmart_core::params::tsuser_home}/transmart-api-server.config.yml"
+    $config_opts = "-Dspring.config.location=${config_location}"
 
     $application_war_file = "${home}/${package_name}-${version}.war"
 
@@ -66,11 +60,6 @@ class transmart_core::backend inherits transmart_core::params {
         owner  => $user,
         mode   => '0700',
     }
-    file { $jobs_dir:
-        ensure => directory,
-        owner  => $user,
-        mode   => '0700',
-    }
     file { $start_script:
         ensure  => file,
         owner   => $user,
@@ -88,8 +77,6 @@ class transmart_core::backend inherits transmart_core::params {
     -> service { 'transmart-server':
         ensure   => $server_status,
         provider => 'systemd',
-        require  => [ File[$logs_dir], File[$jobs_dir], Archive::Nexus[$application_war_file] ],
+        require  => [ File[$logs_dir], Archive::Nexus[$application_war_file] ],
     }
-
 }
-
