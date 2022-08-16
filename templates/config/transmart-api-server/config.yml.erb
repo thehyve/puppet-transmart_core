@@ -38,7 +38,7 @@ org.transmartproject.system.numberOfWorkers: <%= scope.lookupvar('::transmart_co
 
 
 grails.plugin.databasemigration:
-    updateOnStartFileName: classpath:db/changelog/db.changelog-master.yaml
+    updateOnStartFileName: db/changelog/db.changelog-master.yaml
     updateOnStart: <%= scope.lookupvar('::transmart_core::params::liquibase_on').to_s %>  # If true, schema update scripts are executed at startup
 
 org.transmartproject.system.writeLogToDatabase: false
