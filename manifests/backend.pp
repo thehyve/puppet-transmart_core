@@ -32,7 +32,7 @@ class transmart_core::backend inherits transmart_core::params {
 
     $package_name = 'transmart-api-server'
     $config_location = "${::transmart_core::params::tsuser_home}/transmart-api-server.config.yml"
-    $config_opts = "-Dspring.config.location=${config_location}"
+    $config_opts = "-Dspring.config.additional-location=${config_location}"
 
     $application_war_file = "${home}/${package_name}-${version}.war"
 
